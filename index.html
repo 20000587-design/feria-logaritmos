@@ -1,0 +1,3807 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Cuantificación de Magnitudes Extremas mediante Funciones Logarítmicas | Feria de Logros INAC 2026</title>
+  
+  <!-- Google Fonts: Space Grotesk (Titulares Display) + JetBrains Mono (Números y Datos) + Inter (Lectura) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       VARIABLES Y PALETA DE COLOR: "LA REGLA QUE COMPRIME EL UNIVERSO"
+       ========================================================================== */
+    :root {
+      --bg-space: #0a0e1a;
+      --bg-surface: #111728;
+      --bg-card: #151d32;
+      --bg-card-hover: #1b2540;
+      --border-subtle: #233154;
+      --border-bright: #3a4e80;
+      
+      /* Acentos cromáticos */
+      --accent-amber: #ffb020;
+      --accent-amber-glow: rgba(255, 176, 32, 0.35);
+      --accent-cyan: #35e0b0;
+      --accent-cyan-glow: rgba(53, 224, 176, 0.35);
+      --accent-green-ph: #9dff57;
+      --accent-green-glow: rgba(157, 255, 87, 0.3);
+      --accent-danger: #ff4d4d;
+      
+      /* Acentos de aplicaciones */
+      --app-richter: #ff5252;
+      --app-acustica: #c084fc;
+      --app-astronomia: #facc15;
+      --app-informatica: #38bdf8;
+      --app-finanzas: #34d399;
+      --app-medicina: #f472b6;
+      
+      /* Tipografía y textos */
+      --text-main: #f0f4fc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      
+      --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+      --shadow-glow-cyan: 0 0 25px rgba(53, 224, 176, 0.25);
+      --shadow-glow-amber: 0 0 25px rgba(255, 176, 32, 0.25);
+      
+      --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ==========================================================================
+       RESET Y BASE (MOBILE-FIRST)
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      background-color: var(--bg-space);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      background: radial-gradient(circle at 50% 0%, #16223d 0%, var(--bg-space) 75%);
+    }
+
+    /* Respeto a accesibilidad por movimiento reducido */
+    @media (prefers-reduced-motion: reduce) {
+      *, html {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Formato Monoespaciado y tabular obligatorio */
+    .mono {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .num-align-right {
+      text-align: right;
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    p {
+      color: var(--text-muted);
+      font-size: 1.02rem;
+      margin-bottom: 1.25rem;
+    }
+
+    p strong {
+      color: var(--text-main);
+    }
+
+    sub, sup {
+      font-size: 0.72em;
+      line-height: 0;
+      position: relative;
+      vertical-align: baseline;
+      font-family: var(--font-mono);
+    }
+    sup { top: -0.55em; }
+    sub { bottom: -0.25em; }
+
+    /* ==========================================================================
+       BARRA DE NAVEGACIÓN Y POWER OF 10 SCROLL BAR
+       ========================================================================== */
+    .scroll-progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 28px;
+      background: rgba(10, 14, 26, 0.95);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      transition: var(--transition-smooth);
+    }
+
+    .scroll-progress-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(53, 224, 176, 0.15), rgba(255, 176, 32, 0.25));
+      width: 0%;
+      z-index: -1;
+      transition: width 0.1s linear;
+      border-right: 2px solid var(--accent-amber);
+    }
+
+    .scroll-scale-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+      letter-spacing: 0.05em;
+    }
+
+    .scale-power-badge {
+      background: rgba(53, 224, 176, 0.15);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(53, 224, 176, 0.3);
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .scroll-magnitude-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      display: none;
+    }
+
+    @media (min-width: 640px) {
+      .scroll-magnitude-desc { display: inline-block; }
+    }
+
+    .main-navbar {
+      position: fixed;
+      top: 28px;
+      left: 0;
+      width: 100%;
+      height: 62px;
+      background: rgba(10, 14, 26, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(35, 49, 84, 0.7);
+      z-index: 990;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      transition: var(--transition-smooth);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-logo-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-amber));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #0a0e1a;
+      box-shadow: 0 0 12px var(--accent-cyan-glow);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      font-size: 0.68rem;
+      color: var(--accent-amber);
+      font-family: var(--font-mono);
+      display: block;
+    }
+
+    .nav-menu {
+      display: none;
+      align-items: center;
+      gap: 1.25rem;
+      list-style: none;
+    }
+
+    @media (min-width: 900px) {
+      .nav-menu { display: flex; }
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: var(--transition-smooth);
+      position: relative;
+      padding: 4px 0;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--accent-cyan);
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 8px var(--accent-cyan);
+      border-radius: 2px;
+    }
+
+    /* ==========================================================================
+       CONTENEDOR Y GRID GENERAL
+       ========================================================================== */
+    .container {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    section {
+      padding: 5rem 0;
+      position: relative;
+      border-bottom: 1px solid rgba(35, 49, 84, 0.4);
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.8rem;
+      background: rgba(53, 224, 176, 0.08);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(53, 224, 176, 0.25);
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4.5vw, 3rem);
+      margin-bottom: 1.25rem;
+    }
+
+    .section-desc {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      max-width: 780px;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+    }
+
+    /* ==========================================================================
+       BANNERS "TOCA PARA AGRANDAR" (SECCIÓN 3 Y SECCIÓN 5)
+       ========================================================================== */
+    .tap-to-expand-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: linear-gradient(90deg, rgba(255, 176, 32, 0.18), rgba(53, 224, 176, 0.14));
+      border: 1.5px dashed var(--accent-amber);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1.25rem;
+      margin-bottom: 1.25rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      user-select: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .tap-to-expand-banner:hover {
+      background: linear-gradient(90deg, rgba(255, 176, 32, 0.3), rgba(53, 224, 176, 0.25));
+      border-color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(255, 176, 32, 0.35);
+    }
+
+    .tap-banner-label {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: clamp(0.85rem, 2.2vw, 1rem);
+      font-weight: 800;
+      color: var(--accent-amber);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .tap-banner-hint {
+      font-size: 0.78rem;
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      display: none;
+    }
+
+    @media (min-width: 600px) {
+      .tap-banner-hint { display: block; }
+    }
+
+    .tap-hand-icon {
+      display: inline-block;
+      font-size: 1.35rem;
+      animation: handTap 1.6s infinite;
+    }
+
+    @keyframes handTap {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-5px) scale(1.2); }
+    }
+
+    /* ==========================================================================
+       VENTANA MODAL EMERGENTE CON ANIMACIÓN DE ENTRADA Y BOTÓN 'X'
+       ========================================================================== */
+    .expand-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s;
+    }
+
+    .expand-modal-overlay.is-active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .expand-modal-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(6, 9, 18, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .expand-modal-container {
+      position: relative;
+      z-index: 10;
+      background: #0d1322;
+      border: 2px solid var(--accent-cyan);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 1050px;
+      max-height: 92vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.95), 0 0 45px var(--accent-cyan-glow);
+      padding: 2.25rem 1.75rem 1.75rem 1.75rem;
+      transform: scale(0.82) translateY(30px);
+      opacity: 0;
+    }
+
+    .expand-modal-overlay.is-active .expand-modal-container {
+      animation: modalEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes modalEntrance {
+      0% {
+        opacity: 0;
+        transform: scale(0.82) translateY(30px);
+      }
+      70% {
+        transform: scale(1.02) translateY(-4px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* Botón X en la esquina */
+    .modal-close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 77, 77, 0.18);
+      border: 1.5px solid var(--accent-danger);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      cursor: pointer;
+      z-index: 30;
+      transition: var(--transition-smooth);
+    }
+
+    .modal-close-btn:hover {
+      background: var(--accent-danger);
+      color: #0a0e1a;
+      transform: rotate(90deg) scale(1.1);
+      box-shadow: 0 0 20px rgba(255, 77, 77, 0.7);
+    }
+
+    /* ==========================================================================
+       SECCIÓN 0 — HERO / PORTADA
+       ========================================================================== */
+    .hero-section {
+      min-height: 100vh;
+      padding-top: 6rem;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+
+    .hero-chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-chip {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
+    .hero-chip.accent {
+      background: rgba(255, 176, 32, 0.12);
+      border-color: rgba(255, 176, 32, 0.4);
+      color: var(--accent-amber);
+      font-weight: 700;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 8vw, 5.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 0.98;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-cyan) 85%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.2rem, 3.5vw, 2rem);
+      font-family: var(--font-display);
+      color: var(--accent-amber);
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-counter-box {
+      background: rgba(17, 23, 40, 0.8);
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--accent-amber);
+      padding: 1.5rem;
+      border-radius: var(--radius-md);
+      max-width: 680px;
+      backdrop-filter: blur(10px);
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .counter-label {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    }
+
+    .counter-value {
+      font-family: var(--font-mono);
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 800;
+      color: var(--accent-amber);
+      line-height: 1;
+      margin-bottom: 0.6rem;
+      text-shadow: 0 0 20px var(--accent-amber-glow);
+    }
+
+    .counter-desc {
+      font-size: 0.98rem;
+      color: var(--text-main);
+      line-height: 1.4;
+      margin-bottom: 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn-cta-primary {
+      background: var(--accent-cyan);
+      color: #0a0e1a;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.05rem;
+      padding: 14px 28px;
+      border-radius: var(--radius-full);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: var(--transition-smooth);
+      box-shadow: 0 0 25px rgba(53, 224, 176, 0.4);
+      min-height: 48px;
+    }
+
+    .btn-cta-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(53, 224, 176, 0.6);
+      background: #4ef0c2;
+    }
+
+    .hero-scroll-hint {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* ==========================================================================
+       SECCIÓN 1 — EL PROBLEMA DE LOS NÚMEROS GIGANTES (SLIDER DE LA REGLA)
+       ========================================================================== */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (min-width: 850px) {
+      .problem-grid { grid-template-columns: 1.1fr 1fr; }
+    }
+
+    .text-card-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      position: relative;
+    }
+
+    .interactive-ruler-station {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .ruler-control-wrap {
+      margin-bottom: 2rem;
+    }
+
+    .custom-range {
+      width: 100%;
+      height: 12px;
+      -webkit-appearance: none;
+      background: var(--bg-card);
+      border-radius: var(--radius-full);
+      outline: none;
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      margin: 1rem 0;
+    }
+
+    .custom-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent-amber);
+      cursor: pointer;
+      box-shadow: 0 0 15px var(--accent-amber-glow);
+      border: 2px solid #ffffff;
+      transition: var(--transition-smooth);
+    }
+
+    .custom-range::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent-amber);
+      cursor: pointer;
+      box-shadow: 0 0 15px var(--accent-amber-glow);
+      border: 2px solid #ffffff;
+    }
+
+    .ruler-steps-markers {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    .ruler-display-lane {
+      margin-bottom: 1.75rem;
+      position: relative;
+    }
+
+    .ruler-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .ruler-viewport {
+      height: 54px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding: 0 0.5rem;
+    }
+
+    .ruler-bar-lineal {
+      height: 30px;
+      background: linear-gradient(90deg, #ff4d4d, #ff8080);
+      border-radius: 4px;
+      width: 10px;
+      transition: width 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      color: #0a0e1a;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      min-width: 10px;
+    }
+
+    .ruler-bar-log {
+      height: 30px;
+      background: linear-gradient(90deg, var(--accent-cyan), #7ef7d4);
+      border-radius: 4px;
+      width: 10%;
+      transition: width 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      color: #0a0e1a;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.75rem;
+      white-space: nowrap;
+    }
+
+    .ruler-overflow-warning {
+      position: absolute;
+      right: 0.75rem;
+      background: rgba(255, 77, 77, 0.9);
+      color: #ffffff;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: none;
+      animation: pulse 1s infinite;
+    }
+
+    .ruler-reading-feedback {
+      background: rgba(10, 14, 26, 0.6);
+      border-radius: var(--radius-sm);
+      padding: 0.9rem;
+      border: 1px dashed var(--border-subtle);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       SECCIÓN 2 — ¿QUÉ ES UNA FUNCIÓN LOGARÍTMICA? (CALCULADORA VIVA)
+       ========================================================================== */
+    .definition-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    @media (min-width: 850px) {
+      .definition-grid { grid-template-columns: 1fr 1.1fr; }
+    }
+
+    .formula-hero-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .math-formula-display {
+      font-family: var(--font-mono);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+      color: var(--accent-cyan);
+      background: rgba(53, 224, 176, 0.08);
+      border: 1px solid rgba(53, 224, 176, 0.3);
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      text-align: center;
+      margin: 1.5rem 0;
+      letter-spacing: 0.02em;
+    }
+
+    .dual-concept-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .mini-concept-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+    }
+
+    .mini-concept-card.exp {
+      border-top: 3px solid var(--accent-danger);
+    }
+    .mini-concept-card.log {
+      border-top: 3px solid var(--accent-cyan);
+    }
+
+    .mini-concept-title {
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    /* Calculadora viva */
+    .live-calculator-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .calc-input-group {
+      margin: 1.5rem 0;
+    }
+
+    .calc-input-label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--accent-amber);
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+    }
+
+    .calc-input-field {
+      width: 100%;
+      height: 52px;
+      background: var(--bg-card);
+      border: 2px solid var(--border-bright);
+      border-radius: var(--radius-md);
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 1.4rem;
+      font-weight: 700;
+      padding: 0 1rem;
+      text-align: right;
+      outline: none;
+      transition: var(--transition-smooth);
+    }
+
+    .calc-input-field:focus {
+      border-color: var(--accent-amber);
+      box-shadow: 0 0 15px var(--accent-amber-glow);
+    }
+
+    .preset-chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.6rem;
+    }
+
+    .preset-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 4px 10px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .preset-chip:hover {
+      background: rgba(255, 176, 32, 0.15);
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+    }
+
+    .calc-output-display {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    .calc-math-equation {
+      font-family: var(--font-mono);
+      font-size: clamp(1.2rem, 3vw, 1.7rem);
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 0.5rem;
+    }
+
+    .calc-human-explanation {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 0;
+    }
+
+    /* ==========================================================================
+       SECCIÓN 3 — CÓMO FUNCIONA (CONTAR CEROS)
+       ========================================================================== */
+    .zeros-table-wrap {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      overflow-x: auto;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 1.5rem;
+    }
+
+    .zeros-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      min-width: 580px;
+    }
+
+    .zeros-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .zeros-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(35, 49, 84, 0.4);
+      font-size: 0.95rem;
+    }
+
+    .zeros-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .zero-char {
+      display: inline-block;
+      transition: var(--transition-smooth);
+    }
+
+    .zero-char.highlight-zero {
+      color: var(--accent-amber);
+      font-weight: 800;
+      text-shadow: 0 0 10px var(--accent-amber-glow);
+      transform: scale(1.18);
+    }
+
+    .table-ctrls {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 1rem;
+    }
+
+    .btn-animate-zeros {
+      background: rgba(255, 176, 32, 0.12);
+      border: 1px solid var(--accent-amber);
+      color: var(--accent-amber);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-animate-zeros:hover {
+      background: var(--accent-amber);
+      color: #0a0e1a;
+      box-shadow: 0 0 15px var(--accent-amber-glow);
+    }
+
+    /* ==========================================================================
+       SECCIÓN 4 — APLICACIONES REALES (GALERÍA DE MUNDOS: 7 CARDS CON FLIP)
+       ========================================================================== */
+    .worlds-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+
+    @media (min-width: 580px) {
+      .worlds-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 980px) {
+      .worlds-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    .flip-card {
+      background-color: transparent;
+      perspective: 1000px;
+      height: 290px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: left;
+      transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transform-style: preserve-3d;
+      border-radius: var(--radius-lg);
+    }
+
+    .flip-card.flipped .flip-card-inner,
+    .flip-card:focus .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      box-shadow: var(--shadow-card);
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+      background: var(--bg-card);
+      border-color: var(--border-bright);
+    }
+
+    .card-discipline-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .card-discipline-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .card-scale-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent-amber);
+      font-weight: 600;
+    }
+
+    .card-visual-range {
+      margin-top: auto;
+      background: rgba(10, 14, 26, 0.5);
+      padding: 0.75rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .range-label {
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      color: var(--text-dim);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .range-value {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .card-tap-indicator {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      text-align: right;
+      margin-top: 0.4rem;
+    }
+
+    .card-ph .card-discipline-icon { background: rgba(157, 255, 87, 0.15); color: var(--accent-green-ph); }
+    .card-richter .card-discipline-icon { background: rgba(255, 82, 82, 0.15); color: var(--app-richter); }
+    .card-acustica .card-discipline-icon { background: rgba(192, 132, 252, 0.15); color: var(--app-acustica); }
+    .card-astronomia .card-discipline-icon { background: rgba(250, 204, 21, 0.15); color: var(--app-astronomia); }
+    .card-informatica .card-discipline-icon { background: rgba(56, 189, 248, 0.15); color: var(--app-informatica); }
+    .card-finanzas .card-discipline-icon { background: rgba(52, 211, 153, 0.15); color: var(--app-finanzas); }
+    .card-medicina .card-discipline-icon { background: rgba(244, 114, 182, 0.15); color: var(--app-medicina); }
+
+    .worlds-summary-box {
+      margin-top: 2rem;
+      background: rgba(17, 23, 40, 0.6);
+      border-left: 3px solid var(--accent-cyan);
+      padding: 1.25rem 1.5rem;
+      border-radius: var(--radius-sm);
+    }
+
+    /* ==========================================================================
+       SECCIÓN 5 — VISUALIZANDO LA COMPRESIÓN (DEMO CENTRAL - CANVAS INTERACTIVO)
+       ========================================================================== */
+    .graph-station-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .graph-telemetry-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 600px) {
+      .graph-telemetry-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .telemetry-pod {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+    }
+
+    .telemetry-pod.x-lane { border-top: 3px solid var(--accent-amber); }
+    .telemetry-pod.y-lane { border-top: 3px solid var(--accent-cyan); }
+    .telemetry-pod.ratio-lane { border-top: 3px solid var(--accent-green-ph); }
+
+    .telemetry-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.3rem;
+    }
+
+    .telemetry-val {
+      font-family: var(--font-mono);
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .telemetry-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      background: #070a13;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      touch-action: none;
+    }
+
+    #graph-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+    }
+
+    .graph-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .graph-slider-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .graph-preset-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .btn-graph-preset {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-graph-preset:hover, .btn-graph-preset.active {
+      background: rgba(53, 224, 176, 0.15);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .graph-live-punchline {
+      background: rgba(53, 224, 176, 0.08);
+      border: 1px solid rgba(53, 224, 176, 0.3);
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-md);
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    /* ==========================================================================
+       SECCIÓN 6 & 6.1 — ESTRATEGIA Y ESTACIÓN DE QUÍMICA (pH) — DEMO STAND
+       ========================================================================== */
+    .myth-reality-banner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    @media (min-width: 768px) {
+      .myth-reality-banner { grid-template-columns: 1fr 1fr; }
+    }
+
+    .myth-box {
+      background: rgba(255, 77, 77, 0.08);
+      border: 1px solid rgba(255, 77, 77, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+    }
+
+    .reality-box {
+      background: rgba(157, 255, 87, 0.08);
+      border: 1px solid rgba(157, 255, 87, 0.35);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+    }
+
+    .box-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      display: inline-block;
+      margin-bottom: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .myth-badge { background: var(--accent-danger); color: #0a0e1a; }
+    .reality-badge { background: var(--accent-green-ph); color: #0a0e1a; }
+
+    /* Los 3 vasos del stand */
+    .beakers-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    @media (min-width: 680px) {
+      .beakers-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .beaker-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      text-align: center;
+      transition: var(--transition-smooth);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .beaker-card:hover, .beaker-card.active-beaker {
+      border-color: var(--accent-green-ph);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(157, 255, 87, 0.15);
+    }
+
+    .tornasol-indicator-pill {
+      height: 10px;
+      width: 100%;
+      border-radius: var(--radius-full);
+      margin-bottom: 1.25rem;
+    }
+
+    .lemon-tornasol { background: linear-gradient(90deg, #ff2a2a, #ff5e3a); box-shadow: 0 0 12px rgba(255, 42, 42, 0.5); }
+    .vinegar-tornasol { background: linear-gradient(90deg, #ff7a00, #ffa500); box-shadow: 0 0 12px rgba(255, 122, 0, 0.5); }
+    .tomato-tornasol { background: linear-gradient(90deg, #ffb703, #ffd166); box-shadow: 0 0 12px rgba(255, 183, 3, 0.5); }
+
+    .beaker-icon {
+      font-size: 2.8rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .beaker-liquid-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .beaker-ph-tag {
+      font-family: var(--font-mono);
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--accent-green-ph);
+      margin-bottom: 0.6rem;
+    }
+
+    .beaker-conc-math {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      background: var(--bg-card);
+      padding: 6px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Slider interactivo de pH */
+    .ph-interactive-lab {
+      background: var(--bg-surface);
+      border: 2px solid var(--border-bright);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 2.5rem;
+    }
+
+    .ph-scale-slider-wrap {
+      margin: 1.5rem 0;
+    }
+
+    .ph-spectrum-bar {
+      height: 14px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(90deg, 
+        #ff0033 0%, 
+        #ff3b30 14.2%, 
+        #ff9500 28.5%, 
+        #ffcc00 42.8%, 
+        #34c759 50%, 
+        #00c7be 64.2%, 
+        #30b0c7 78.5%, 
+        #5856d6 92.8%, 
+        #af52de 100%);
+      margin-bottom: 0.8rem;
+    }
+
+    .ph-reading-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .ph-reading-box { grid-template-columns: 1fr 2fr; }
+    }
+
+    .ph-big-stat {
+      text-align: center;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .ph-big-stat {
+        border-bottom: none;
+        border-right: 1px solid var(--border-subtle);
+        padding-bottom: 0;
+        padding-right: 1.5rem;
+      }
+    }
+
+    .ph-label-sub {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .ph-val-huge {
+      font-family: var(--font-mono);
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--accent-green-ph);
+      margin: 0.4rem 0;
+    }
+
+    .ph-nature-type {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .ph-concentration-detail {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .conc-formula-line {
+      font-family: var(--font-mono);
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.6rem;
+    }
+
+    .conc-decimal-line {
+      font-family: var(--font-mono);
+      font-size: clamp(0.9rem, 2.2vw, 1.15rem);
+      color: var(--accent-amber);
+      background: rgba(10, 14, 26, 0.7);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      word-break: break-all;
+    }
+
+    /* Comparador de Dilución 4 a 2 */
+    .dilution-alert-banner {
+      background: linear-gradient(135deg, rgba(255, 176, 32, 0.15), rgba(157, 255, 87, 0.1));
+      border: 1px solid var(--accent-amber);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .dilution-alert-badge {
+      background: var(--accent-amber);
+      color: #0a0e1a;
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: var(--radius-md);
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    /* Nota para el expositor */
+    .speaker-note-box {
+      background: rgba(17, 23, 40, 0.9);
+      border: 1px dashed var(--accent-cyan);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin: 2rem 0;
+    }
+
+    .speaker-badge {
+      background: var(--accent-cyan);
+      color: #0a0e1a;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: var(--radius-full);
+      display: inline-block;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+    }
+
+    /* Checklist de materiales y protocolo */
+    .stand-preparation-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .stand-preparation-grid { grid-template-columns: 1fr 1.2fr; }
+    }
+
+    .prep-column {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+    }
+
+    .checklist-items {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(35, 49, 84, 0.3);
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+
+    .checklist-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--accent-green-ph);
+      cursor: pointer;
+    }
+
+    .step-list-ordered {
+      list-style: none;
+      counter-reset: stand-steps;
+      margin-top: 1rem;
+    }
+
+    .step-list-ordered li {
+      counter-increment: stand-steps;
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 0.9rem;
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+
+    .step-list-ordered li::before {
+      content: counter(stand-steps);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(53, 224, 176, 0.15);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       SECCIÓN 7 — CONCLUSIÓN (EL MENSAJE CENTRAL)
+       ========================================================================== */
+    .conclusion-hero-title {
+      font-size: clamp(2.2rem, 6.5vw, 4.5rem);
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+
+    .conclusion-three-pillars {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin: 2.5rem 0;
+    }
+
+    @media (min-width: 768px) {
+      .conclusion-three-pillars { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .pillar-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .pillar-factor {
+      font-family: var(--font-mono);
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1;
+      margin: 0.8rem 0;
+    }
+
+    .factor-10 { color: var(--accent-cyan); }
+    .factor-100 { color: var(--accent-amber); }
+    .factor-1000 { color: var(--accent-danger); }
+
+    .pillar-transition {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      background: var(--bg-card);
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      display: inline-block;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* ==========================================================================
+       OPTIMIZACIONES PARA ORIENTACIÓN HORIZONTAL (MÓVILES Y TABLETS EN LANDSCAPE)
+       ========================================================================== */
+    @media (orientation: landscape) and (max-height: 550px) {
+      .scroll-progress-container {
+        height: 20px;
+      }
+      .scroll-scale-indicator {
+        font-size: 0.68rem;
+      }
+      .main-navbar {
+        top: 20px;
+        height: 44px;
+        padding: 0 0.75rem;
+      }
+      .brand-logo-badge {
+        width: 26px;
+        height: 26px;
+        font-size: 0.75rem;
+      }
+      .brand-title {
+        font-size: 0.78rem;
+      }
+      .brand-sub {
+        display: none;
+      }
+      .nav-menu {
+        display: flex;
+        gap: 0.75rem;
+      }
+      .nav-link {
+        font-size: 0.75rem;
+        padding: 2px 0;
+      }
+
+      section {
+        padding: 2.5rem 0;
+      }
+
+      .hero-section {
+        min-height: auto;
+        padding-top: 4.5rem;
+        padding-bottom: 2.5rem;
+      }
+      .hero-content {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 1.5rem;
+        align-items: center;
+      }
+      .hero-chips-wrap {
+        margin-bottom: 0.75rem;
+      }
+      .hero-chip {
+        padding: 4px 10px;
+        font-size: 0.7rem;
+      }
+      .hero-title {
+        font-size: 2.2rem;
+        margin-bottom: 0.4rem;
+      }
+      .hero-subtitle {
+        font-size: 1.05rem;
+        margin-bottom: 0.75rem;
+      }
+      .hero-counter-box {
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+      }
+      .counter-value {
+        font-size: 2.2rem;
+      }
+      .counter-desc {
+        font-size: 0.85rem;
+      }
+
+      /* Grids y sliders adaptados para apaisado */
+      .problem-grid,
+      .definition-grid,
+      .stand-preparation-grid,
+      .myth-reality-banner {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+      }
+
+      .interactive-ruler-station,
+      .formula-hero-card,
+      .live-calculator-box,
+      .graph-station-card,
+      .ph-interactive-lab {
+        padding: 1.25rem;
+      }
+
+      .ruler-viewport {
+        height: 44px;
+      }
+      .ruler-bar-lineal, .ruler-bar-log {
+        height: 24px;
+        font-size: 0.7rem;
+      }
+
+      .math-formula-display {
+        font-size: 1.7rem;
+        padding: 0.75rem;
+        margin: 0.75rem 0;
+      }
+      .calc-input-field {
+        height: 44px;
+        font-size: 1.15rem;
+      }
+
+      .worlds-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+      .flip-card {
+        height: 235px;
+      }
+      .flip-card-front, .flip-card-back {
+        padding: 1rem;
+      }
+      .card-discipline-name {
+        font-size: 1.05rem;
+      }
+
+      /* Canvas en horizontal móvil */
+      .canvas-wrapper {
+        height: 250px;
+      }
+      .graph-telemetry-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+      }
+      .telemetry-pod {
+        padding: 0.75rem;
+      }
+      .telemetry-val {
+        font-size: 1.45rem;
+      }
+
+      /* Estación Química */
+      .beakers-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin: 1.25rem 0;
+      }
+      .beaker-card {
+        padding: 1rem;
+      }
+      .beaker-icon {
+        font-size: 2rem;
+        margin-bottom: 0.3rem;
+      }
+      .ph-reading-box {
+        grid-template-columns: 1fr 2fr;
+        padding: 1rem;
+      }
+      .ph-val-huge {
+        font-size: 2.6rem;
+      }
+
+      /* Conclusión */
+      .conclusion-three-pillars {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+      .pillar-card {
+        padding: 1.25rem;
+      }
+      .pillar-factor {
+        font-size: 2.2rem;
+        margin: 0.4rem 0;
+      }
+
+      /* Ventana Modal en horizontal */
+      .expand-modal-container {
+        padding: 1.25rem 1rem 1rem 1rem;
+        max-height: 94vh;
+      }
+      .modal-close-btn {
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+      }
+      .expand-modal-container .canvas-wrapper {
+        height: 210px !important;
+      }
+    }
+
+    @media (orientation: landscape) and (min-height: 551px) and (max-height: 850px) {
+      .canvas-wrapper {
+        height: 310px;
+      }
+      .worlds-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .flip-card {
+        height: 260px;
+      }
+    }
+
+    /* ==========================================================================
+       FOOTER Y CRÉDITOS INSTITUCIONALES
+       ========================================================================== */
+    footer {
+      background: #060911;
+      border-top: 1px solid var(--border-subtle);
+      padding: 3.5rem 0 2rem 0;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-grid { grid-template-columns: 2fr 1fr; }
+    }
+
+    .footer-credits-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .footer-bottom-bar {
+      border-top: 1px solid rgba(35, 49, 84, 0.3);
+      padding-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+    }
+
+    @media (min-width: 600px) {
+      .footer-bottom-bar {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA DE PROGRESO DE POTENCIAS DE 10 -->
+  <div class="scroll-progress-container" aria-label="Progreso en potencias de 10">
+    <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+    <div class="scroll-scale-indicator">
+      <span>ESCALA ACTUAL:</span>
+      <span class="scale-power-badge" id="scale-power-display">10<sup>0</sup></span>
+      <span class="scroll-magnitude-desc" id="scale-magnitude-text">(1 unidad · Base)</span>
+    </div>
+    <div class="num-align-right" style="font-size: 0.75rem; color: var(--text-dim);" id="scroll-percent-display">
+      0%
+    </div>
+  </div>
+
+  <!-- NAVBAR FIJA -->
+  <nav class="main-navbar">
+    <a href="#hero" class="nav-brand">
+      <div class="brand-logo-badge">10<sup>x</sup></div>
+      <div>
+        <div class="brand-title">FUNCIONES LOGARÍTMICAS</div>
+        <span class="brand-sub">Feria INAC 2026 · Equipo 7</span>
+      </div>
+    </a>
+
+    <ul class="nav-menu">
+      <li><a href="#problema" class="nav-link">El Problema</a></li>
+      <li><a href="#definicion" class="nav-link">¿Qué es?</a></li>
+      <li><a href="#como-funciona" class="nav-link">Contar Ceros</a></li>
+      <li><a href="#aplicaciones" class="nav-link">Aplicaciones</a></li>
+      <li><a href="#grafico" class="nav-link">Demo Curva</a></li>
+      <li><a href="#estacion-quimica" class="nav-link">Estación pH</a></li>
+      <li><a href="#conclusion" class="nav-link">Conclusión</a></li>
+    </ul>
+  </nav>
+
+  <!-- ========================================================================
+       SECCIÓN 0 — HERO / PORTADA
+       ======================================================================== -->
+  <header class="hero-section" id="hero">
+    <canvas id="hero-canvas"></canvas>
+    
+    <div class="container hero-content">
+      <div>
+        <div class="hero-chips-wrap">
+          <span class="hero-chip accent">Feria de Logros INAC · Edición 2026</span>
+          <span class="hero-chip">Segundo Año de Bachillerato</span>
+          <span class="hero-chip">Precálculo</span>
+          <span class="hero-chip">Equipo 7</span>
+        </div>
+
+        <h1 class="hero-title">FUNCIONES LOGARÍTMICAS</h1>
+        <p class="hero-subtitle">Cuantificación de Magnitudes Extremas</p>
+
+        <div class="hero-actions">
+          <a href="#problema" class="btn-cta-primary">
+            <span>Entrar a la escala</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+          </a>
+          <span class="hero-scroll-hint">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            Desplaza hacia abajo
+          </span>
+        </div>
+      </div>
+
+      <div class="hero-counter-box">
+        <div class="counter-label">Energía Liberada por un Sismo Destructivo</div>
+        <div class="counter-value mono" id="hero-energy-counter">0</div>
+        <p class="counter-desc">
+          <strong>Mil millones de veces más energía:</strong> Un sismo fuerte libera 
+          <span class="mono" style="color: var(--accent-amber); font-weight: 700;">1,000,000,000</span> 
+          de veces más energía que un sismo imperceptible. ¿Cómo dibujamos una regla que contenga semejante magnitud sin salirnos del planeta?
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       SECCIÓN 1 — EL PROBLEMA DE LOS NÚMEROS GIGANTES (SLIDER DE LA REGLA)
+       ======================================================================== -->
+  <section id="problema">
+    <div class="container">
+      <div class="section-tag">Sección 1 · El Reto Físico</div>
+      <h2 class="section-title">El Problema de los Números Gigantes</h2>
+      <p class="section-desc">
+        Imagina que debes crear una regla para medir cosas en la naturaleza. El problema es que un sismo fuerte libera 
+        <strong>1,000,000,000 (mil millones)</strong> de veces más energía que un sismo imperceptible. ¡No hay papel en el mundo para dibujar una regla tan larga!
+      </p>
+
+      <div class="problem-grid">
+        <div class="text-card-box">
+          <h3 style="margin-bottom: 1rem; color: var(--accent-amber);">La Solución: Multiplicar en vez de Sumar</h3>
+          <p>
+            Para solucionar esto, los científicos inventaron las <strong>Escalas Logarítmicas</strong>. En lugar de sumar en la regla (<span class="mono">1, 2, 3, 4...</span>), multiplicamos por <span class="mono">10</span> en cada paso:
+          </p>
+          <ul style="list-style: none; margin: 1rem 0; font-family: var(--font-mono); font-size: 0.95rem;">
+            <li style="padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><strong style="color: var(--accent-cyan);">Nivel 1:</strong> 10 unidades de energía (10<sup>1</sup>)</li>
+            <li style="padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><strong style="color: var(--accent-cyan);">Nivel 2:</strong> 100 unidades (10<sup>2</sup>)</li>
+            <li style="padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><strong style="color: var(--accent-cyan);">Nivel 3:</strong> 1,000 unidades (10<sup>3</sup>)</li>
+            <li style="padding: 6px 0;"><strong style="color: var(--accent-cyan);">Nivel 6:</strong> 1,000,000 unidades (10<sup>6</sup>)</li>
+          </ul>
+          <p>
+            Así, logramos meter el número <strong>1,000,000</strong> en el Nivel 6 de nuestra gráfica sin romper el papel.
+          </p>
+        </div>
+
+        <!-- SLIDER COMPARATIVO DE "LA REGLA" -->
+        <div class="interactive-ruler-station">
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Laboratorio: Prueba de la Regla</h3>
+          <p style="font-size: 0.85rem; margin-bottom: 1rem;">Mueve el slider para intentar medir magnitudes crecientes en una regla ordinaria vs una regla logarítmica.</p>
+          
+          <div class="ruler-control-wrap">
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.88rem;">
+              <span>Valor a Medir (<span style="color: var(--accent-amber);">X</span>):</span>
+              <span id="ruler-input-val" style="color: var(--accent-amber); font-weight: 700;">10</span>
+            </div>
+            <input type="range" min="1" max="7" value="1" step="1" class="custom-range" id="ruler-slider" aria-label="Selector de magnitud para prueba de regla">
+            <div class="ruler-steps-markers">
+              <span>10</span>
+              <span>100</span>
+              <span>1K</span>
+              <span>10K</span>
+              <span>100K</span>
+              <span>1M</span>
+              <span>1B</span>
+            </div>
+          </div>
+
+          <!-- REGLA LINEAL -->
+          <div class="ruler-display-lane">
+            <div class="ruler-header">
+              <span style="color: #ff7070; font-weight: 600;">1. Regla Lineal (Suma 1 en 1)</span>
+              <span class="mono" id="lineal-pixels-readout" style="color: var(--text-dim); font-size: 0.78rem;">10 px</span>
+            </div>
+            <div class="ruler-viewport">
+              <div class="ruler-bar-lineal" id="ruler-lineal-bar">10</div>
+              <span class="ruler-overflow-warning" id="ruler-overflow-msg">¡SE SALE DE LA PANTALLA!</span>
+            </div>
+          </div>
+
+          <!-- REGLA LOGARÍTMICA -->
+          <div class="ruler-display-lane" style="margin-bottom: 1rem;">
+            <div class="ruler-header">
+              <span style="color: var(--accent-cyan); font-weight: 600;">2. Regla Logarítmica (Potencias de 10)</span>
+              <span class="mono" id="log-units-readout" style="color: var(--accent-cyan); font-size: 0.78rem;">Nivel 1</span>
+            </div>
+            <div class="ruler-viewport">
+              <div class="ruler-bar-log" id="ruler-log-bar">Nivel 1</div>
+            </div>
+          </div>
+
+          <div class="ruler-reading-feedback" id="ruler-comparison-text">
+            Con 10 unidades, ambas reglas caben en pantalla. Sube a 1,000 o 1,000,000 para ver qué ocurre.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SECCIÓN 2 — ¿QUÉ ES UNA FUNCIÓN LOGARÍTMICA? (CALCULADORA VIVA)
+       ======================================================================== -->
+  <section id="definicion">
+    <div class="container">
+      <div class="section-tag">Sección 2 · Fundamento Matemático</div>
+      <h2 class="section-title">¿Qué es una Función Logarítmica?</h2>
+      <p class="section-desc">
+        Una función logarítmica es una operación matemática que responde a la pregunta fundamental: 
+        <strong>"¿A qué exponente debo elevar una base (generalmente 10) para obtener un número determinado?"</strong>.
+      </p>
+
+      <div class="definition-grid">
+        <div class="formula-hero-card">
+          <p>
+            Se escribe matemáticamente como:
+          </p>
+          <div class="math-formula-display">
+            f(x) = log<sub>10</sub>(x)
+          </div>
+          <p>
+            Es la <strong>función inversa</strong> de la función exponencial <span class="mono" style="color: var(--accent-danger);">f(x) = 10<sup>x</sup></span>. Mientras la función exponencial hace que los números "exploten" hacia arriba de forma incontrolable, la función logarítmica hace exactamente lo contrario: 
+            <strong>toma números gigantescos y los comprime en una escala pequeña y manejable</strong>. Por eso la llamamos el <em style="color: var(--accent-cyan);">compresor de datos</em> del universo.
+          </p>
+
+          <div class="dual-concept-cards">
+            <div class="mini-concept-card exp">
+              <div class="mini-concept-title" style="color: var(--accent-danger);">Exponencial (10<sup>x</sup>)</div>
+              <p style="font-size: 0.82rem; margin-bottom: 0;">Los valores <strong>explotan</strong> disparándose verticalmente al infinito.</p>
+            </div>
+            <div class="mini-concept-card log">
+              <div class="mini-concept-title" style="color: var(--accent-cyan);">Logarítmica (log<sub>10</sub>)</div>
+              <p style="font-size: 0.82rem; margin-bottom: 0;">Los números gigantes se <strong>aplanan</strong> en niveles 1, 2, 3, 4, 5...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CALCULADORA VIVA: "¿A QUÉ EXPONENTE?" -->
+        <div class="live-calculator-box">
+          <h3 style="font-size: 1.25rem; margin-bottom: 0.4rem;">Calculadora Viva de Exponentes</h3>
+          <p style="font-size: 0.88rem;">Escribe cualquier número <span class="mono">X</span> o selecciona un preset para ver a qué exponente debemos elevar el 10:</p>
+
+          <div class="calc-input-group">
+            <label for="calc-number-input" class="calc-input-label">Ingresa el número real (X):</label>
+            <input type="number" id="calc-number-input" class="calc-input-field" value="100000" min="0.000001" step="any" aria-label="Número para calcular logaritmo base 10">
+            
+            <div class="preset-chips-wrap">
+              <button type="button" class="preset-chip" data-preset="10">10</button>
+              <button type="button" class="preset-chip" data-preset="100">100</button>
+              <button type="button" class="preset-chip" data-preset="1000">1,000</button>
+              <button type="button" class="preset-chip" data-preset="25000">25,000</button>
+              <button type="button" class="preset-chip" data-preset="100000">100,000</button>
+              <button type="button" class="preset-chip" data-preset="1000000">1,000,000</button>
+              <button type="button" class="preset-chip" data-preset="1000000000">1 Mil Millón</button>
+            </div>
+          </div>
+
+          <div class="calc-output-display">
+            <div class="calc-math-equation" id="calc-equation-result">
+              log<sub>10</sub>(100,000) = 5
+            </div>
+            <p class="calc-human-explanation" id="calc-explanation-text">
+              Para obtener <strong>100,000</strong> unidades, debes elevar 10 al exponente <strong>5</strong> (<span class="mono">10<sup>5</sup> = 100,000</span>). ¡Un número de cien mil queda comprimido en un simple 5!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SECCIÓN 3 — CÓMO FUNCIONA (CONTAR CEROS)
+       ======================================================================== -->
+  <section id="como-funciona">
+    <div class="container">
+      <div class="section-tag">Sección 3 · Regla Práctica</div>
+      <h2 class="section-title">Cómo Funciona: "Contar Ceros"</h2>
+      <p class="section-desc">
+        El logaritmo funciona esencialmente <strong>"contando ceros"</strong>: cada vez que un número se multiplica por 10, su logaritmo aumenta exactamente en <strong>1 unidad</strong>. La escala logarítmica no es lineal (no crece en sumas iguales), sino multiplicativa (crece en productos iguales).
+      </p>
+
+      <!-- MENSAJE / BOTÓN DE AGRANDAR PARA LA TABLA -->
+      <div class="tap-to-expand-banner" data-expand="zeros" role="button" tabindex="0" title="Toca para ampliar la tabla de ceros en pantalla grande">
+        <div class="tap-banner-label">
+          <span class="tap-hand-icon">👆</span>
+          <span>TOCA AQUÍ PARA EXPANDIR LA TABLA</span>
+        </div>
+        <div class="tap-banner-hint">🔍 Ver en pantalla grande con animación para el público</div>
+      </div>
+
+      <!-- TABLA DE CONTAR CEROS -->
+      <div class="zeros-table-wrap">
+        <div class="table-ctrls">
+          <button type="button" class="btn-animate-zeros" id="btn-trigger-zeros-anim">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            Animar conteo de ceros
+          </button>
+        </div>
+        <table class="zeros-table" id="zeros-table">
+          <thead>
+            <tr>
+              <th>Magnitud Real (X)</th>
+              <th>Notación en Potencia</th>
+              <th class="num-align-right">Ceros Contados</th>
+              <th class="num-align-right">Logaritmo (Y = log<sub>10</sub>(X))</th>
+              <th>Lectura de la Escala</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-zeros="1">
+              <td><span class="mono num-text">1<span class="zero-char">0</span></span></td>
+              <td>10<sup>1</sup></td>
+              <td class="num-align-right" style="color: var(--accent-amber);">1 cero</td>
+              <td class="num-align-right" style="color: var(--accent-cyan); font-weight: 700;">1</td>
+              <td>Escala Nivel 1</td>
+            </tr>
+            <tr data-zeros="2">
+              <td><span class="mono num-text">1<span class="zero-char">0</span><span class="zero-char">0</span></span></td>
+              <td>10<sup>2</sup></td>
+              <td class="num-align-right" style="color: var(--accent-amber);">2 ceros</td>
+              <td class="num-align-right" style="color: var(--accent-cyan); font-weight: 700;">2</td>
+              <td>Escala Nivel 2 (10x más que el Nivel 1)</td>
+            </tr>
+            <tr data-zeros="3">
+              <td><span class="mono num-text">1,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span></span></td>
+              <td>10<sup>3</sup></td>
+              <td class="num-align-right" style="color: var(--accent-amber);">3 ceros</td>
+              <td class="num-align-right" style="color: var(--accent-cyan); font-weight: 700;">3</td>
+              <td>Escala Nivel 3 (10x más que el Nivel 2)</td>
+            </tr>
+            <tr data-zeros="4">
+              <td><span class="mono num-text">1<span class="zero-char">0</span>,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span></span></td>
+              <td>10<sup>4</sup></td>
+              <td class="num-align-right" style="color: var(--accent-amber);">4 ceros</td>
+              <td class="num-align-right" style="color: var(--accent-cyan); font-weight: 700;">4</td>
+              <td>Escala Nivel 4</td>
+            </tr>
+            <tr data-zeros="5">
+              <td><span class="mono num-text">1<span class="zero-char">0</span><span class="zero-char">0</span>,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span></span></td>
+              <td>10<sup>5</sup></td>
+              <td class="num-align-right" style="color: var(--accent-amber);">5 ceros</td>
+              <td class="num-align-right" style="color: var(--accent-cyan); font-weight: 700;">5</td>
+              <td>Escala Nivel 5</td>
+            </tr>
+            <tr data-zeros="6">
+              <td><span class="mono num-text">1,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span>,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span></span></td>
+              <td>10<sup>6</sup></td>
+              <td class="num-align-right" style="color: var(--accent-amber);">6 ceros</td>
+              <td class="num-align-right" style="color: var(--accent-cyan); font-weight: 700;">6</td>
+              <td>Escala Nivel 6 (Un millón comprimido en 6)</td>
+            </tr>
+            <tr data-zeros="9">
+              <td><span class="mono num-text">1,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span>,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span>,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span></span></td>
+              <td>10<sup>9</sup></td>
+              <td class="num-align-right" style="color: var(--accent-amber);">9 ceros</td>
+              <td class="num-align-right" style="color: var(--accent-cyan); font-weight: 700;">9</td>
+              <td>Escala Nivel 9 (Mil millones comprimido en 9)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SECCIÓN 4 — APLICACIONES REALES (LA GALERÍA DE MUNDOS)
+       ======================================================================== -->
+  <section id="aplicaciones">
+    <div class="container">
+      <div class="section-tag">Sección 4 · Galería Multidisciplinaria</div>
+      <h2 class="section-title">Aplicaciones Reales: La Galería de Mundos</h2>
+      <p class="section-desc">
+        Toca o haz clic en cada tarjeta para voltearla y descubrir cómo la compresión logarítmica se utiliza en diferentes disciplinas científicas y tecnológicas.
+      </p>
+
+      <div class="worlds-grid">
+        <!-- 1. Química -->
+        <div class="flip-card card-ph" tabindex="0" role="button" aria-label="Tarjeta Química pH">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div>
+                <div class="card-discipline-icon">🧪</div>
+                <div class="card-discipline-name">Química</div>
+                <div class="card-scale-tag">Escala de pH</div>
+              </div>
+              <div class="card-visual-range">
+                <span class="range-label">Rango [H+] real:</span>
+                <span class="range-value">1 a 0.00000000000001</span>
+              </div>
+              <div class="card-tap-indicator">Toca para voltear ↻</div>
+            </div>
+            <div class="flip-card-back">
+              <div style="font-weight: 700; color: var(--accent-green-ph); margin-bottom: 0.5rem;">pH = −log[H+]</div>
+              <p style="font-size: 0.85rem; line-height: 1.35; margin-bottom: 0.5rem;">
+                Mide la concentración de iones de hidrógeno en agua. Un cambio de pH 4 a pH 2 no es el doble: ¡es 100 veces más ácido!
+              </p>
+              <div class="card-visual-range">
+                <span class="range-label">Escala Comprimida:</span>
+                <span class="range-value" style="color: var(--accent-green-ph);">1 al 14</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Geología -->
+        <div class="flip-card card-richter" tabindex="0" role="button" aria-label="Tarjeta Geología Richter">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div>
+                <div class="card-discipline-icon">🌋</div>
+                <div class="card-discipline-name">Geología</div>
+                <div class="card-scale-tag">Escala Richter / Magnitud</div>
+              </div>
+              <div class="card-visual-range">
+                <span class="range-label">Energía Sísmica real:</span>
+                <span class="range-value">10<sup>4</sup> a 10<sup>18</sup> Joules</span>
+              </div>
+              <div class="card-tap-indicator">Toca para voltear ↻</div>
+            </div>
+            <div class="flip-card-back">
+              <div style="font-weight: 700; color: var(--app-richter); margin-bottom: 0.5rem;">M = log<sub>10</sub>(A) + C</div>
+              <p style="font-size: 0.85rem; line-height: 1.35; margin-bottom: 0.5rem;">
+                Un terremoto de magnitud 7 no es un punto más fuerte que uno de 6: ¡libera 31.6 veces más energía destructiva y 10 veces más amplitud!
+              </p>
+              <div class="card-visual-range">
+                <span class="range-label">Escala Comprimida:</span>
+                <span class="range-value" style="color: var(--app-richter);">1 a 9+ grados</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Acústica -->
+        <div class="flip-card card-acustica" tabindex="0" role="button" aria-label="Tarjeta Acústica Decibelios">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div>
+                <div class="card-discipline-icon">🔊</div>
+                <div class="card-discipline-name">Acústica</div>
+                <div class="card-scale-tag">Escala de Decibelios (dB)</div>
+              </div>
+              <div class="card-visual-range">
+                <span class="range-label">Intensidad real:</span>
+                <span class="range-value">10<sup>−12</sup> a 10<sup>2</sup> W/m²</span>
+              </div>
+              <div class="card-tap-indicator">Toca para voltear ↻</div>
+            </div>
+            <div class="flip-card-back">
+              <div style="font-weight: 700; color: var(--app-acustica); margin-bottom: 0.5rem;">dB = 10 · log(I / I₀)</div>
+              <p style="font-size: 0.85rem; line-height: 1.35; margin-bottom: 0.5rem;">
+                Una voz normal da unos 60 dB y una licuadora unos 80 dB. Esos 20 dB de diferencia equivalen a <strong>10<sup>2</sup> = 100 veces más</strong> intensidad sonora.
+              </p>
+              <div class="card-visual-range">
+                <span class="range-label">Escala Comprimida:</span>
+                <span class="range-value" style="color: var(--app-acustica);">0 a 140 dB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Astronomía -->
+        <div class="flip-card card-astronomia" tabindex="0" role="button" aria-label="Tarjeta Astronomía Magnitud Aparente">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div>
+                <div class="card-discipline-icon">✨</div>
+                <div class="card-discipline-name">Astronomía</div>
+                <div class="card-scale-tag">Magnitud Aparente Estelar</div>
+              </div>
+              <div class="card-visual-range">
+                <span class="range-label">Brillo estelar real:</span>
+                <span class="range-value">Rango de 1 a 10<sup>14</sup> fotones</span>
+              </div>
+              <div class="card-tap-indicator">Toca para voltear ↻</div>
+            </div>
+            <div class="flip-card-back">
+              <div style="font-weight: 700; color: var(--app-astronomia); margin-bottom: 0.5rem;">m₁ − m₂ = −2.5 · log(F₁/F₂)</div>
+              <p style="font-size: 0.85rem; line-height: 1.35; margin-bottom: 0.5rem;">
+                El ojo humano percibe la luz logarítmicamente. Una estrella de magnitud 1 brilla exactamente 100 veces más que una de magnitud 6.
+              </p>
+              <div class="card-visual-range">
+                <span class="range-label">Escala Comprimida:</span>
+                <span class="range-value" style="color: var(--app-astronomia);">−26 (Sol) a +30 (Hubble)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Informática -->
+        <div class="flip-card card-informatica" tabindex="0" role="button" aria-label="Tarjeta Informática Búsqueda Binaria">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div>
+                <div class="card-discipline-icon">💻</div>
+                <div class="card-discipline-name">Informática</div>
+                <div class="card-scale-tag">Búsqueda Binaria O(log n)</div>
+              </div>
+              <div class="card-visual-range">
+                <span class="range-label">Datos a buscar:</span>
+                <span class="range-value">1,000,000,000 registros</span>
+              </div>
+              <div class="card-tap-indicator">Toca para voltear ↻</div>
+            </div>
+            <div class="flip-card-back">
+              <div style="font-weight: 700; color: var(--app-informatica); margin-bottom: 0.5rem;">Tiempo = O(log₂ n)</div>
+              <p style="font-size: 0.85rem; line-height: 1.35; margin-bottom: 0.5rem;">
+                Para encontrar un dato entre mil millones de usuarios en una base ordenada, el algoritmo solo realiza unas <strong>30 comparaciones</strong>.
+              </p>
+              <div class="card-visual-range">
+                <span class="range-label">Pasos de ejecución:</span>
+                <span class="range-value" style="color: var(--app-informatica);">Solo ~30 pasos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Finanzas -->
+        <div class="flip-card card-finanzas" tabindex="0" role="button" aria-label="Tarjeta Finanzas Interés Compuesto">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div>
+                <div class="card-discipline-icon">📈</div>
+                <div class="card-discipline-name">Finanzas</div>
+                <div class="card-scale-tag">Interés Compuesto & Regla 72</div>
+              </div>
+              <div class="card-visual-range">
+                <span class="range-label">Capital acumulado:</span>
+                <span class="range-value">C(t) = C₀ · (1 + r)<sup>t</sup></span>
+              </div>
+              <div class="card-tap-indicator">Toca para voltear ↻</div>
+            </div>
+            <div class="flip-card-back">
+              <div style="font-weight: 700; color: var(--app-finanzas); margin-bottom: 0.5rem;">t = ln(2) / ln(1 + r)</div>
+              <p style="font-size: 0.85rem; line-height: 1.35; margin-bottom: 0.5rem;">
+                Para despejar el tiempo que tarda una inversión en duplicarse o multiplicarse por 10, los economistas aplican logaritmos a la tasa de interés.
+              </p>
+              <div class="card-visual-range">
+                <span class="range-label">Cálculo de duplicación:</span>
+                <span class="range-value" style="color: var(--app-finanzas);">Despeje del exponente t</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. Medicina -->
+        <div class="flip-card card-medicina" tabindex="0" role="button" aria-label="Tarjeta Medicina Carga Viral">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div>
+                <div class="card-discipline-icon">🩺</div>
+                <div class="card-discipline-name">Medicina</div>
+                <div class="card-scale-tag">Carga Viral & Bacteriología</div>
+              </div>
+              <div class="card-visual-range">
+                <span class="range-label">Copias de virus/mL:</span>
+                <span class="range-value">50 a 10,000,000 copias</span>
+              </div>
+              <div class="card-tap-indicator">Toca para voltear ↻</div>
+            </div>
+            <div class="flip-card-back">
+              <div style="font-weight: 700; color: var(--app-medicina); margin-bottom: 0.5rem;">Reducción Log (Log Drop)</div>
+              <p style="font-size: 0.85rem; line-height: 1.35; margin-bottom: 0.5rem;">
+                Un desinfectante con eficacia "3-log reduction" elimina el 99.9% de los patógenos. Una reducción de 1 log equivale a matar el 90% de bacterias.
+              </p>
+              <div class="card-visual-range">
+                <span class="range-label">Escala Médica:</span>
+                <span class="range-value" style="color: var(--app-medicina);">1-log (90%) a 5-log (99.999%)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="worlds-summary-box">
+        <p style="margin-bottom: 0; font-size: 0.95rem; color: var(--text-main);">
+          <strong>El Patrón Universal:</strong> En todos estos campos el fenómeno físico posee un rango de valores astronómicamente extenso; el logaritmo comprime esa realidad descomunal en números amigables y comparables para la mente humana.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SECCIÓN 5 — VISUALIZANDO LA COMPRESIÓN (DEMO CENTRAL)
+       ======================================================================== -->
+  <section id="grafico">
+    <div class="container">
+      <div class="section-tag">Sección 5 · Telemetría en Vivo</div>
+      <h2 class="section-title">Visualizando la Compresión Logarítmica</h2>
+      <p class="section-desc">
+        Observa cómo la curva logarítmica <span class="mono" style="color: var(--accent-cyan);">f(x) = log<sub>10</sub>(x)</span> se va "acostando". El eje X representa la <strong>Realidad Física</strong> en millones de unidades, y el eje Y la <strong>Escala Comprimida</strong> (1, 2, 3...). 
+        ¡Arrastra el punto o desliza el control para ver la compresión en tiempo real!
+      </p>
+
+      <div class="graph-station-card">
+        <!-- MENSAJE / BOTÓN DE AGRANDAR PARA LA DEMO GRÁFICA -->
+        <div class="tap-to-expand-banner" data-expand="graph" role="button" tabindex="0" title="Toca para ampliar el gráfico interactivo a pantalla completa">
+          <div class="tap-banner-label" style="color: var(--accent-cyan);">
+            <span class="tap-hand-icon">👆</span>
+            <span>TOCA AQUÍ PARA EXPANDIR LA DEMO GRÁFICA</span>
+          </div>
+          <div class="tap-banner-hint">🔍 Simulador interactivo gigante con telemetría en vivo</div>
+        </div>
+
+        <!-- PANELES DE TELEMETRÍA -->
+        <div class="graph-telemetry-grid">
+          <div class="telemetry-pod x-lane">
+            <div class="telemetry-title">Eje X · Realidad Física</div>
+            <div class="telemetry-val mono" style="color: var(--accent-amber);" id="telemetry-x-val">100</div>
+            <div class="telemetry-sub" id="telemetry-x-sub">Unidades de energía o concentración</div>
+          </div>
+
+          <div class="telemetry-pod y-lane">
+            <div class="telemetry-title">Eje Y · Escala Comprimida</div>
+            <div class="telemetry-val mono" style="color: var(--accent-cyan);" id="telemetry-y-val">2.00</div>
+            <div class="telemetry-sub">Valor en escala: f(x) = log<sub>10</sub>(x)</div>
+          </div>
+
+          <div class="telemetry-pod ratio-lane">
+            <div class="telemetry-title">Comportamiento en Vivo</div>
+            <div class="telemetry-val mono" style="color: var(--accent-green-ph); font-size: 1.45rem;" id="telemetry-ratio-val">X avanza 10x</div>
+            <div class="telemetry-sub" id="telemetry-ratio-sub">Y solo sube +1 unidad</div>
+          </div>
+        </div>
+
+        <!-- CANVAS GRÁFICO INTERACTIVO TOUCH-READY -->
+        <div class="canvas-wrapper">
+          <canvas id="graph-canvas" aria-label="Gráfico interactivo de la función logarítmica f(x) = log10(x)"></canvas>
+        </div>
+
+        <!-- CONTROLES DEL GRÁFICO -->
+        <div class="graph-controls">
+          <div class="graph-slider-row">
+            <span class="mono" style="font-size: 0.8rem; color: var(--text-dim);">1</span>
+            <input type="range" min="1" max="1000000" value="100" class="custom-range" id="graph-x-slider" style="margin: 0;" aria-label="Slider para mover valor X en el gráfico">
+            <span class="mono" style="font-size: 0.8rem; color: var(--text-dim);">1M</span>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-top: 0.5rem;">
+            <span style="font-size: 0.82rem; color: var(--text-muted);">Puntos Clave de Demostración:</span>
+            <div class="graph-preset-buttons">
+              <button type="button" class="btn-graph-preset" data-val="10">(10, 1)</button>
+              <button type="button" class="btn-graph-preset active" data-val="100">(100, 2)</button>
+              <button type="button" class="btn-graph-preset" data-val="1000">(1,000, 3)</button>
+              <button type="button" class="btn-graph-preset" data-val="10000">(10,000, 4)</button>
+              <button type="button" class="btn-graph-preset" data-val="100000">(100,000, 5)</button>
+              <button type="button" class="btn-graph-preset" data-val="1000000">(1,000,000, 6)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="graph-live-punchline" id="graph-punchline-text">
+          Nota cómo en el eje Y subimos pasos pequeños (+1), pero en el eje X avanzamos distancias astronómicas (10x). ¡Esa es la compresión logarítmica!
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SECCIÓN 6 & 6.1 — ESTRATEGIA Y ESTACIÓN DE QUÍMICA (pH) — DEMO STAND
+       ======================================================================== -->
+  <section id="estacion-quimica">
+    <div class="container">
+      <div class="section-tag">Sección 6 & 6.1 · La Única Estación Demostrativa del Stand</div>
+      <h2 class="section-title">La Estación de Química: Escala de pH</h2>
+      <p class="section-desc">
+        En nuestro stand de feria demostramos la "Mentira de la Escala" mediante un experimento de laboratorio tangible con 3 sustancias cotidianas.
+      </p>
+
+      <!-- MITO VS REALIDAD -->
+      <div class="myth-reality-banner">
+        <div class="myth-box">
+          <span class="box-badge myth-badge">EL MITO DE LA ESCALA</span>
+          <h3 style="font-size: 1.15rem; color: #ff8080; margin-bottom: 0.5rem;">"Un 4 es el doble de un 2"</h3>
+          <p style="font-size: 0.92rem; margin-bottom: 0;">
+            El sentido común ordinario nos engaña haciéndonos creer que un cambio numérico modesto en la escala representa un cambio proporcional en la realidad física.
+          </p>
+        </div>
+        <div class="reality-box">
+          <span class="box-badge reality-badge">LA REALIDAD CIENTÍFICA</span>
+          <h3 style="font-size: 1.15rem; color: var(--accent-green-ph); margin-bottom: 0.5rem;">¡Es 100 veces más concentrado!</h3>
+          <p style="font-size: 0.92rem; margin-bottom: 0;">
+            Al ser una escala logarítmica, cada paso multiplica por 10. Bajar 2 unidades en pH de 4 a 2 significa multiplicar la acidez por <strong>10 × 10 = 100 veces</strong>.
+          </p>
+        </div>
+      </div>
+
+      <!-- FÓRMULA CENTRAL DEL STAND -->
+      <div style="text-align: center; margin: 2rem 0;">
+        <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-dim); text-transform: uppercase;">Ecuación Química Central</span>
+        <div style="font-family: var(--font-mono); font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; color: var(--accent-green-ph); text-shadow: 0 0 20px var(--accent-green-glow);">
+          pH = −log<sub>10</sub>[H<sup>+</sup>]
+        </div>
+      </div>
+
+      <!-- LOS 3 VASOS DEL STAND -->
+      <h3 style="font-size: 1.3rem; margin-bottom: 1rem; text-align: center;">Las 3 Muestras Reales del Stand</h3>
+      <div class="beakers-grid">
+        <!-- Vaso 1: Limón -->
+        <div class="beaker-card" data-ph="2">
+          <div class="tornasol-indicator-pill lemon-tornasol" title="Color tornasol rojo intenso"></div>
+          <div class="beaker-icon">🍋</div>
+          <div class="beaker-liquid-name">Jugo de Limón</div>
+          <div class="beaker-ph-tag">pH ≈ 2.0</div>
+          <div class="beaker-conc-math">
+            [H<sup>+</sup>] = 10<sup>−2</sup> = <strong>0.01</strong> mol/L
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-dim); margin-top: 0.6rem; margin-bottom: 0;">
+            Color tornasol: Rojo intenso (muy ácido).
+          </p>
+        </div>
+
+        <!-- Vaso 2: Vinagre -->
+        <div class="beaker-card" data-ph="3">
+          <div class="tornasol-indicator-pill vinegar-tornasol" title="Color tornasol anaranjado"></div>
+          <div class="beaker-icon">🍶</div>
+          <div class="beaker-liquid-name">Vinagre Blanco</div>
+          <div class="beaker-ph-tag">pH ≈ 3.0</div>
+          <div class="beaker-conc-math">
+            [H<sup>+</sup>] = 10<sup>−3</sup> = <strong>0.001</strong> mol/L
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-dim); margin-top: 0.6rem; margin-bottom: 0;">
+            Color tornasol: Anaranjado ácido.
+          </p>
+        </div>
+
+        <!-- Vaso 3: Tomate -->
+        <div class="beaker-card" data-ph="4">
+          <div class="tornasol-indicator-pill tomato-tornasol" title="Color tornasol amarillo ambar"></div>
+          <div class="beaker-icon">🍅</div>
+          <div class="beaker-liquid-name">Jugo de Tomate</div>
+          <div class="beaker-ph-tag">pH ≈ 4.0</div>
+          <div class="beaker-conc-math">
+            [H<sup>+</sup>] = 10<sup>−4</sup> = <strong>0.0001</strong> mol/L
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-dim); margin-top: 0.6rem; margin-bottom: 0;">
+            Color tornasol: Amarillo/ámbar.
+          </p>
+        </div>
+      </div>
+
+      <!-- SIMULADOR INTERACTIVO DE pH COMPLETO -->
+      <div class="ph-interactive-lab">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+          <h3 style="font-size: 1.2rem;">Simulador de Dilución y pH (1 a 14)</h3>
+          <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-green-ph);" id="ph-state-badge">Ácido Fuerte</span>
+        </div>
+
+        <div class="ph-scale-slider-wrap">
+          <div class="ph-spectrum-bar"></div>
+          <input type="range" min="1" max="14" value="2" step="0.1" class="custom-range" id="ph-slider" aria-label="Control deslizante de pH de 1 a 14">
+          <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim);">
+            <span>pH 1 (Ácido Extremo)</span>
+            <span>pH 7 (Neutro: Agua Pura)</span>
+            <span>pH 14 (Base Extrema)</span>
+          </div>
+        </div>
+
+        <div class="ph-reading-box">
+          <div class="ph-big-stat">
+            <div class="ph-label-sub">Valor de pH medido</div>
+            <div class="ph-val-huge" id="ph-val-big">2.0</div>
+            <div class="ph-nature-type" id="ph-nature-text">Jugo de Limón (Muestra 1)</div>
+          </div>
+
+          <div class="ph-concentration-detail">
+            <div class="conc-formula-line" id="ph-math-line">
+              [H<sup>+</sup>] = 10<sup>−2.0</sup> mol/L
+            </div>
+            <div class="conc-decimal-line" id="ph-decimal-line">
+              Concentración decimal: <strong>0.01</strong> mol/L
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.6rem; margin-bottom: 0;" id="ph-zeros-explanation">
+              En cada unidad de aumento de pH, se agrega un cero después del punto decimal, dividiendo la concentración de acidez entre 10.
+            </p>
+          </div>
+        </div>
+
+        <!-- BANNER DE COMPARACIÓN DE DILUCIÓN (TOMATE VS LIMÓN) -->
+        <div class="dilution-alert-banner" id="dilution-banner">
+          <div class="dilution-alert-badge">×100</div>
+          <div>
+            <div style="font-weight: 700; color: #ffffff; font-size: 1.05rem;">
+              Comparación Directa: Jugo de Limón (pH 2) vs Jugo de Tomate (pH 4)
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+              Aunque en la escala la diferencia parece de solo "2 números", el jugo de limón posee exactamente <strong>100 veces más concentración de iones H<sup>+</sup></strong> que el jugo de tomate (0.01 vs 0.0001 mol/L).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTA DEL EXPOSITOR (EL PORQUÉ DEL SIGNO MENOS) -->
+      <div class="speaker-note-box">
+        <span class="speaker-badge">Nota Clave para el Expositor · Pregunta Típica del Jurado</span>
+        <h4 style="font-size: 1.1rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">
+          ¿Por qué la fórmula del pH lleva un signo negativo? (<span class="mono">pH = −log[H<sup>+</sup>]</span>)
+        </h4>
+        <p style="margin-bottom: 0.5rem;">
+          La concentración de iones hidrógeno disueltos en el agua es siempre una fracción decimal minúscula (por ejemplo, <span class="mono">0.0001</span> en el tomate o <span class="mono">0.0000001</span> en el agua pura).
+        </p>
+        <p style="margin-bottom: 0;">
+          El logaritmo de cualquier decimal menor que 1 arroja un número negativo: 
+          <span class="mono" style="color: var(--accent-amber);">log<sub>10</sub>(0.0001) = −4</span>. 
+          Para evitar que los químicos tengan que hablar incómodamente de "ácido grado menos cuatro", los científicos antepusieron un signo negativo: 
+          <span class="mono" style="color: var(--accent-green-ph); font-weight: 700;">pH = −(−4) = 4</span>. 
+          <strong>El signo menos existe únicamente para transformar el resultado en una escala positiva, limpia y cómoda.</strong>
+        </p>
+      </div>
+
+      <!-- CHECKLIST DE MATERIALES Y PROTOCOLO DEL STAND -->
+      <div class="stand-preparation-grid">
+        <div class="prep-column">
+          <h4 style="font-size: 1.1rem; color: var(--accent-green-ph); margin-bottom: 0.5rem;">Checklist de Materiales del Stand</h4>
+          <p style="font-size: 0.82rem; color: var(--text-dim);">Elementos físicos requeridos en la mesa de la feria:</p>
+          <ul class="checklist-items">
+            <li class="checklist-item">
+              <input type="checkbox" id="m1" checked>
+              <label for="m1">3 vasos transparentes idénticos de vidrio o acrílico</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="m2" checked>
+              <label for="m2">Jugo de limón natural recién exprimido (pH ≈ 2.0)</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="m3" checked>
+              <label for="m3">Vinagre blanco destilado de cocina (pH ≈ 3.0)</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="m4" checked>
+              <label for="m4">Jugo de tomate colado y homogéneo (pH ≈ 4.0)</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="m5" checked>
+              <label for="m5">Tiras reactivas de papel tornasol / pH-metro digital</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="m6" checked>
+              <label for="m6">Etiquetas rotuladas para cada vaso con su fórmula</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="m7" checked>
+              <label for="m7">Cartel impreso con la fórmula y la tabla de concentraciones</label>
+            </li>
+          </ul>
+        </div>
+
+        <div class="prep-column">
+          <h4 style="font-size: 1.1rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">Protocolo de Demostración (7 Pasos)</h4>
+          <p style="font-size: 0.82rem; color: var(--text-dim);">Guía paso a paso ejecutada frente a los evaluadores:</p>
+          <ol class="step-list-ordered">
+            <li><strong>Conseguir materiales:</strong> Disponer los 3 vasos, reactivos y soluciones en la mesa.</li>
+            <li><strong>Servir y etiquetar:</strong> Servir volumen idéntico de cada líquido y colocar rótulo visible.</li>
+            <li><strong>Medir el pH real:</strong> Sumergir la tira reactiva o sonda en vivo mostrando el viraje de color.</li>
+            <li><strong>Calcular la concentración:</strong> Aplicar la fórmula inversa <span class="mono">[H<sup>+</sup>] = 10<sup>−pH</sup></span> en la pizarra.</li>
+            <li><strong>Comparar magnitudes:</strong> Demostrar que entre limón (pH 2) y tomate (pH 4) la diferencia real es de 100x.</li>
+            <li><strong>Exhibir el cartel:</strong> Vincular el resultado empírico con la gráfica teórica de Precálculo.</li>
+            <li><strong>Ensayar la demostración:</strong> Concluir con seguridad la explicación experimental frente a los visitantes y evaluadores.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SECCIÓN 7 — CONCLUSIÓN (EL MENSAJE CENTRAL)
+       ======================================================================== -->
+  <section id="conclusion">
+    <div class="container" style="text-align: center;">
+      <div class="section-tag">Sección 7 · Cierre Conceptual</div>
+      <h2 class="conclusion-hero-title">La Mentira de la Escala</h2>
+      <p class="section-desc" style="margin-left: auto; margin-right: auto;">
+        Una diferencia pequeña en la escala logarítmica esconde una diferencia enorme en la realidad física. Un número que sube de 4 a 5, de 60 a 80, o de 5.7 a 7.7, parece un cambio modesto, pero en la realidad representa multiplicar la magnitud verdadera por 10, 100 o más veces.
+      </p>
+
+      <div class="conclusion-three-pillars">
+        <!-- Ejemplo 1 -->
+        <div class="pillar-card">
+          <div class="pillar-transition">4 → 5</div>
+          <div class="pillar-factor factor-10">×10</div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+            1 solo punto en la escala equivale a <strong>multiplicar por diez</strong> la magnitud física del fenómeno.
+          </p>
+        </div>
+
+        <!-- Ejemplo 2 -->
+        <div class="pillar-card">
+          <div class="pillar-transition">60 → 80 dB</div>
+          <div class="pillar-factor factor-100">×100</div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+            20 decibelios de incremento representan <strong>100 veces más</strong> intensidad acústica liberada en el aire.
+          </p>
+        </div>
+
+        <!-- Ejemplo 3 -->
+        <div class="pillar-card">
+          <div class="pillar-transition">5.7 → 7.7 Richter</div>
+          <div class="pillar-factor factor-1000">×1,000+</div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+            Dos grados de diferencia en sismos representan más de <strong>1,000 veces</strong> más energía liberada y devastación.
+          </p>
+        </div>
+      </div>
+
+      <!-- CIERRE FINAL -->
+      <div style="max-width: 820px; margin: 3rem auto 0 auto; background: rgba(17, 23, 40, 0.7); border: 1px solid var(--border-bright); border-radius: var(--radius-lg); padding: 2rem;">
+        <h3 style="color: var(--accent-amber); font-size: 1.3rem; margin-bottom: 0.8rem;">Mensaje para Recordar</h3>
+        <p style="font-family: var(--font-display); font-size: 1.15rem; color: #ffffff; line-height: 1.4; margin-bottom: 1.25rem;">
+          "Los logaritmos no reducen la realidad: la ordenan para que quepa en nuestra mente. Nunca juzgues una escala logarítmica con ojos lineales."
+        </p>
+        <a href="#hero" class="btn-cta-primary" style="margin: 0 auto;">
+          <span>Volver al Inicio del Universo</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       FOOTER / CRÉDITOS
+       ======================================================================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-credits-title">Proyecto: Cuantificación de Magnitudes Extremas mediante Funciones Logarítmicas</div>
+          <p style="font-size: 0.88rem; margin-bottom: 0.75rem;">
+            Investigación aplicada y demostración empírica para la comprensión de escalas no lineales en fenómenos de alta intensidad.
+          </p>
+          <div class="footer-chips-row">
+            <span class="hero-chip">Equipo 7</span>
+            <span class="hero-chip">Precálculo</span>
+            <span class="hero-chip">Segundo Año de Bachillerato</span>
+            <span class="hero-chip accent">Feria de Logros INAC · Edición 2026</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 0.75rem;">Índice Rápido</h4>
+          <ul style="list-style: none; font-size: 0.82rem; font-family: var(--font-mono); line-height: 1.8;">
+            <li><a href="#hero" style="color: var(--accent-cyan); text-decoration: none;">0. Portada & Sismos</a></li>
+            <li><a href="#problema" style="color: var(--text-muted); text-decoration: none;">1. La Regla de Papel</a></li>
+            <li><a href="#definicion" style="color: var(--text-muted); text-decoration: none;">2. Definición f(x)=log(x)</a></li>
+            <li><a href="#como-funciona" style="color: var(--text-muted); text-decoration: none;">3. Contar Ceros</a></li>
+            <li><a href="#aplicaciones" style="color: var(--text-muted); text-decoration: none;">4. Galería de Mundos</a></li>
+            <li><a href="#grafico" style="color: var(--accent-cyan); text-decoration: none;">5. Gráfico Interactivo (Demo)</a></li>
+            <li><a href="#estacion-quimica" style="color: var(--accent-green-ph); text-decoration: none;">6. Estación pH (Stand)</a></li>
+            <li><a href="#conclusion" style="color: var(--text-muted); text-decoration: none;">7. Conclusión</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <div>Feria de Logros INAC 2026 · Proyecto Precálculo · Equipo 7</div>
+        <div>Desarrollo Web Autocontenido · HTML5 / CSS3 / Vanilla JS</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       VENTANA MODAL EMERGENTE (PANTALLA COMPLETA CON BOTÓN 'X' Y ANIMACIÓN)
+       ======================================================================== -->
+  <div id="expand-modal" class="expand-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="expand-modal-backdrop" id="modal-backdrop"></div>
+    <div class="expand-modal-container">
+      <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Cerrar ventana emergente" title="Cerrar ventana">
+        ✕
+      </button>
+      <div class="modal-body" id="modal-body-content">
+        <!-- Inyección dinámica de contenido ampliado -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       LÓGICA JAVASCRIPT VAINILLA (SIN DEPENDENCIAS)
+       ======================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // ------------------------------------------------------------------------
+      // 1. GESTOR DE SCROLL: PROGRESO EN POTENCIAS DE 10 Y SCROLL-SPY
+      // ------------------------------------------------------------------------
+      const progressBar = document.getElementById('scroll-progress-bar');
+      const scalePowerDisplay = document.getElementById('scale-power-display');
+      const scaleMagnitudeText = document.getElementById('scale-magnitude-text');
+      const scrollPercentDisplay = document.getElementById('scroll-percent-display');
+      const navLinks = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('section, header');
+
+      const magnitudeSteps = [
+        { power: '10⁰', val: '1 unidad', desc: 'Base física ordinaria' },
+        { power: '10¹', val: '10 unidades', desc: 'x10 veces la base' },
+        { power: '10²', val: '100 unidades', desc: 'x100 veces (Ácido pH 2 vs 4)' },
+        { power: '10³', val: '1,000 unidades', desc: 'x1,000 unidades (Kilo)' },
+        { power: '10⁴', val: '10,000 unidades', desc: 'x10,000 unidades' },
+        { power: '10⁵', val: '100,000 unidades', desc: 'x100,000 unidades' },
+        { power: '10⁶', val: '1,000,000 unidades', desc: '1 Millón (Mega)' },
+        { power: '10⁷', val: '10,000,000 unidades', desc: '10 Millones' },
+        { power: '10⁸', val: '100,000,000 unidades', desc: '100 Millones' },
+        { power: '10⁹', val: '1,000,000,000 unidades', desc: '1 Mil Millón (Giga · Sismo destructivo)' }
+      ];
+
+      function handleScroll() {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progressFraction = docHeight > 0 ? Math.min(1, Math.max(0, scrollTop / docHeight)) : 0;
+        const percent = Math.round(progressFraction * 100);
+
+        progressBar.style.width = percent + '%';
+        scrollPercentDisplay.textContent = percent + '%';
+
+        const stepIndex = Math.min(magnitudeSteps.length - 1, Math.floor(progressFraction * magnitudeSteps.length));
+        const currentStep = magnitudeSteps[stepIndex];
+        scalePowerDisplay.innerHTML = currentStep.power.replace(/(\d+)$/, '<sup>$1</sup>');
+        scaleMagnitudeText.textContent = `(${currentStep.val} · ${currentStep.desc})`;
+
+        let currentSectionId = '';
+        sections.forEach(sec => {
+          const top = sec.offsetTop - 120;
+          const height = sec.offsetHeight;
+          if (scrollTop >= top && scrollTop < top + height) {
+            currentSectionId = sec.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + currentSectionId) {
+            link.classList.add('active');
+          }
+        });
+      }
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll();
+
+      // ------------------------------------------------------------------------
+      // 2. HERO: CONTADOR ANIMADO (0 A 1,000,000,000) Y CANVAS DE COMPRESIÓN
+      // ------------------------------------------------------------------------
+      const energyCounter = document.getElementById('hero-energy-counter');
+      const targetEnergy = 1000000000;
+      let counterTriggered = false;
+
+      function animateHeroCounter() {
+        if (counterTriggered) return;
+        counterTriggered = true;
+
+        const startTime = performance.now();
+        const duration = 2400; // ms
+
+        function step(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(1, elapsed / duration);
+          const easeOut = 1 - Math.pow(1 - progress, 3);
+          const currentVal = Math.floor(easeOut * targetEnergy);
+          energyCounter.textContent = currentVal.toLocaleString('en-US');
+
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            energyCounter.textContent = targetEnergy.toLocaleString('en-US');
+          }
+        }
+        requestAnimationFrame(step);
+      }
+
+      setTimeout(animateHeroCounter, 300);
+
+      // Hero Canvas: Partículas simulando puntos que se van aplanando logarítmicamente
+      const heroCanvas = document.getElementById('hero-canvas');
+      const heroCtx = heroCanvas.getContext('2d');
+      let heroWidth = (heroCanvas.width = window.innerWidth);
+      let heroHeight = (heroCanvas.height = window.innerHeight);
+
+      const numParticles = 65;
+      const particles = [];
+
+      for (let i = 0; i < numParticles; i++) {
+        particles.push({
+          x: Math.random() * heroWidth,
+          y: Math.random() * heroHeight,
+          speed: 0.8 + Math.random() * 1.5,
+          size: 1.5 + Math.random() * 2.5,
+          alpha: 0.2 + Math.random() * 0.6,
+          waveOffset: Math.random() * Math.PI * 2
+        });
+      }
+
+      function drawHeroBackground() {
+        heroCtx.clearRect(0, 0, heroWidth, heroHeight);
+
+        const centerY = heroHeight * 0.62;
+        const t = performance.now() * 0.0015;
+
+        heroCtx.beginPath();
+        heroCtx.strokeStyle = 'rgba(53, 224, 176, 0.12)';
+        heroCtx.lineWidth = 2;
+        for (let x = 0; x < heroWidth; x += 15) {
+          const normX = (x / heroWidth) * 9 + 1;
+          const logVal = Math.log10(normX);
+          const y = centerY - logVal * (heroHeight * 0.35);
+          if (x === 0) heroCtx.moveTo(x, y);
+          else heroCtx.lineTo(x, y);
+        }
+        heroCtx.stroke();
+
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.speed;
+          if (p.x > heroWidth) {
+            p.x = 0;
+            p.y = Math.random() * heroHeight;
+          }
+
+          const normX = Math.max(1, (p.x / heroWidth) * 9 + 1);
+          const curveY = centerY - Math.log10(normX) * (heroHeight * 0.32);
+          p.y += (curveY - p.y) * 0.02;
+
+          heroCtx.beginPath();
+          heroCtx.arc(p.x, p.y + Math.sin(t + p.waveOffset) * 5, p.size, 0, Math.PI * 2);
+          heroCtx.fillStyle = (i % 3 === 0) ? `rgba(255, 176, 32, ${p.alpha})` : `rgba(53, 224, 176, ${p.alpha})`;
+          heroCtx.fill();
+        }
+
+        requestAnimationFrame(drawHeroBackground);
+      }
+      requestAnimationFrame(drawHeroBackground);
+
+      // ------------------------------------------------------------------------
+      // 3. SECCIÓN 1: SLIDER DE LA REGLA (LINEAL VS LOGARÍTMICA)
+      // ------------------------------------------------------------------------
+      const rulerSlider = document.getElementById('ruler-slider');
+      const rulerInputVal = document.getElementById('ruler-input-val');
+      const rulerLinealBar = document.getElementById('ruler-lineal-bar');
+      const rulerLogBar = document.getElementById('ruler-log-bar');
+      const linealPixelsReadout = document.getElementById('lineal-pixels-readout');
+      const logUnitsReadout = document.getElementById('log-units-readout');
+      const rulerOverflowMsg = document.getElementById('ruler-overflow-msg');
+      const rulerComparisonText = document.getElementById('ruler-comparison-text');
+
+      const rulerStepsData = [
+        { exp: 1, val: 10, label: '10', linealPx: 30, logPct: 15, text: 'Con 10 unidades, ambas reglas son fáciles de dibujar.' },
+        { exp: 2, val: 100, label: '100', linealPx: 120, logPct: 28, text: 'Con 100 unidades, la regla lineal ya mide 4 veces más. La logarítmica solo subió a Nivel 2.' },
+        { exp: 3, val: 1000, label: '1,000', linealPx: 750, logPct: 45, text: '¡Alerta! Con 1,000 unidades la regla lineal ya se desborda de la pantalla si no la cortamos.' },
+        { exp: 4, val: 10000, label: '10,000', linealPx: 3500, logPct: 60, text: 'Con 10,000 la regla lineal necesitaría 3.5 metros de papel físico. La logarítmica está comodísima en Nivel 4.' },
+        { exp: 5, val: 100000, label: '100,000', linealPx: 25000, logPct: 75, text: 'Con 100,000 la regla lineal necesitaría una tira de 25 metros. La logarítmica: Nivel 5.' },
+        { exp: 6, val: 1000000, label: '1,000,000', linealPx: 180000, logPct: 90, text: '¡Un millón! La regla lineal requeriría un papel de 180 metros (casi 2 estadios de fútbol). En la logarítmica es solo el Nivel 6.' },
+        { exp: 9, val: 1000000000, label: '1,000,000,000', linealPx: 90000000, logPct: 100, text: '¡Mil millones! La regla lineal daría la vuelta al país. La logarítmica cabe en una tarjeta de presentación: Nivel 9.' }
+      ];
+
+      function updateRulerDemo() {
+        const stepIdx = parseInt(rulerSlider.value, 10) - 1;
+        const current = rulerStepsData[stepIdx];
+
+        rulerInputVal.textContent = current.label;
+
+        const containerWidth = rulerLinealBar.parentElement.clientWidth;
+        if (current.linealPx > containerWidth) {
+          rulerLinealBar.style.width = '100%';
+          rulerLinealBar.textContent = '¡Desbordada!';
+          rulerOverflowMsg.style.display = 'block';
+          linealPixelsReadout.textContent = `Requeriría ${(current.linealPx).toLocaleString()} px`;
+        } else {
+          rulerLinealBar.style.width = current.linealPx + 'px';
+          rulerLinealBar.textContent = current.label;
+          rulerOverflowMsg.style.display = 'none';
+          linealPixelsReadout.textContent = `${current.linealPx} px`;
+        }
+
+        rulerLogBar.style.width = current.logPct + '%';
+        rulerLogBar.textContent = `Nivel ${current.exp} (10^${current.exp})`;
+        logUnitsReadout.textContent = `Nivel ${current.exp}`;
+
+        rulerComparisonText.textContent = current.text;
+      }
+
+      rulerSlider.addEventListener('input', updateRulerDemo);
+      updateRulerDemo();
+
+      // ------------------------------------------------------------------------
+      // 4. SECCIÓN 2: CALCULADORA VIVA "¿A QUÉ EXPONENTE?"
+      // ------------------------------------------------------------------------
+      const calcInput = document.getElementById('calc-number-input');
+      const calcEquation = document.getElementById('calc-equation-result');
+      const calcExplanation = document.getElementById('calc-explanation-text');
+      const presetButtons = document.querySelectorAll('.preset-chip');
+
+      function calculateLog() {
+        let x = parseFloat(calcInput.value);
+        if (isNaN(x) || x <= 0) {
+          calcEquation.innerHTML = '<span style="color: var(--accent-danger);">Error: X debe ser > 0</span>';
+          calcExplanation.textContent = 'El logaritmo solo está definido para números reales positivos estrictamente mayores que cero.';
+          return;
+        }
+
+        const logVal = Math.log10(x);
+        const formattedX = x.toLocaleString('en-US', { maximumFractionDigits: 4 });
+        const roundedLog = Number.isInteger(logVal) ? logVal : logVal.toFixed(3);
+
+        calcEquation.innerHTML = `log<sub>10</sub>(${formattedX}) = ${roundedLog}`;
+
+        if (Number.isInteger(logVal)) {
+          calcExplanation.innerHTML = `Para obtener exactamente <strong>${formattedX}</strong> unidades, debes elevar 10 a la potencia <strong>${roundedLog}</strong> (<span class="mono">10<sup>${roundedLog}</sup> = ${formattedX}</span>). ¡Comprime ${formattedX} en un número entero manejable!`;
+        } else {
+          calcExplanation.innerHTML = `Para obtener <strong>${formattedX}</strong>, debes elevar 10 a una potencia decimal de <strong>${roundedLog}</strong> (<span class="mono">10<sup>${roundedLog}</sup> ≈ ${formattedX}</span>).`;
+        }
+      }
+
+      calcInput.addEventListener('input', calculateLog);
+
+      presetButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+          const val = this.getAttribute('data-preset');
+          calcInput.value = val;
+          calculateLog();
+        });
+      });
+
+      // ------------------------------------------------------------------------
+      // 5. SECCIÓN 3: ANIMACIÓN DE "CONTAR CEROS"
+      // ------------------------------------------------------------------------
+      const btnAnimateZeros = document.getElementById('btn-trigger-zeros-anim');
+      const tableRows = document.querySelectorAll('#zeros-table tbody tr');
+
+      function runZerosAnimation(rowsToAnimate, buttonElement) {
+        if (!buttonElement) return;
+        buttonElement.disabled = true;
+        buttonElement.style.opacity = '0.6';
+
+        rowsToAnimate.forEach(row => {
+          const zeros = row.querySelectorAll('.zero-char');
+          zeros.forEach(z => z.classList.remove('highlight-zero'));
+        });
+
+        let rowIndex = 0;
+        function animateRow() {
+          if (rowIndex >= rowsToAnimate.length) {
+            buttonElement.disabled = false;
+            buttonElement.style.opacity = '1';
+            return;
+          }
+
+          const row = rowsToAnimate[rowIndex];
+          const zeros = row.querySelectorAll('.zero-char');
+          let zeroIdx = 0;
+
+          function pulseZero() {
+            if (zeroIdx < zeros.length) {
+              zeros[zeroIdx].classList.add('highlight-zero');
+              zeroIdx++;
+              setTimeout(pulseZero, 120);
+            } else {
+              rowIndex++;
+              setTimeout(animateRow, 200);
+            }
+          }
+          pulseZero();
+        }
+        animateRow();
+      }
+
+      btnAnimateZeros.addEventListener('click', function () {
+        runZerosAnimation(tableRows, btnAnimateZeros);
+      });
+
+      // ------------------------------------------------------------------------
+      // 6. SECCIÓN 4: TARJETAS FLIP (TOUCH Y CLICK)
+      // ------------------------------------------------------------------------
+      const flipCards = document.querySelectorAll('.flip-card');
+      flipCards.forEach(card => {
+        card.addEventListener('click', function () {
+          this.classList.toggle('flipped');
+        });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.classList.toggle('flipped');
+          }
+        });
+      });
+
+      // ------------------------------------------------------------------------
+      // 7. SECCIÓN 5: CANVAS INTERACTIVO DE LA CURVA f(x)=log10(x) (DEMO CENTRAL)
+      // ------------------------------------------------------------------------
+      const graphCanvas = document.getElementById('graph-canvas');
+      const graphCtx = graphCanvas.getContext('2d');
+      const graphSlider = document.getElementById('graph-x-slider');
+      const telemetryX = document.getElementById('telemetry-x-val');
+      const telemetryY = document.getElementById('telemetry-y-val');
+      const telemetryRatioVal = document.getElementById('telemetry-ratio-val');
+      const telemetryRatioSub = document.getElementById('telemetry-ratio-sub');
+      const graphPunchline = document.getElementById('graph-punchline-text');
+      const graphPresetBtns = document.querySelectorAll('.btn-graph-preset');
+
+      let currentXVal = 100;
+      let isDraggingCanvas = false;
+
+      // Variables para el Canvas del Modal cuando esté activo
+      let modalGraphCanvas = null;
+      let modalGraphCtx = null;
+      let isDraggingModalCanvas = false;
+
+      function resizeGraphCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = graphCanvas.parentElement.getBoundingClientRect();
+        graphCanvas.width = rect.width * dpr;
+        graphCanvas.height = rect.height * dpr;
+        graphCtx.resetTransform();
+        graphCtx.scale(dpr, dpr);
+        drawLogGraph(graphCtx, graphCanvas, rect.width, rect.height);
+      }
+
+      function getCanvasCoords(xVal, yVal, width, height, padding) {
+        const logX = Math.log10(Math.max(1, xVal));
+        const plotW = width - padding.left - padding.right;
+        const plotH = height - padding.top - padding.bottom;
+
+        const screenX = padding.left + (logX / 6) * plotW;
+        const screenY = (height - padding.bottom) - (yVal / 6) * plotH;
+        return { x: screenX, y: screenY };
+      }
+
+      function drawLogGraph(ctx, canvasElem, width, height) {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, width, height);
+
+        const padding = { top: 25, right: 30, bottom: 40, left: 50 };
+        const plotW = width - padding.left - padding.right;
+        const plotH = height - padding.top - padding.bottom;
+
+        // Cuadrícula
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = 'rgba(35, 49, 84, 0.4)';
+
+        // Líneas horizontales de Y (0 a 6)
+        for (let y = 0; y <= 6; y++) {
+          const cy = (height - padding.bottom) - (y / 6) * plotH;
+          ctx.beginPath();
+          ctx.moveTo(padding.left, cy);
+          ctx.lineTo(width - padding.right, cy);
+          ctx.stroke();
+
+          ctx.fillStyle = '#64748b';
+          ctx.font = '10px "JetBrains Mono", monospace';
+          ctx.textAlign = 'right';
+          ctx.fillText(y.toString(), padding.left - 8, cy + 3);
+        }
+
+        // Líneas verticales de X
+        const xPowers = [
+          { val: 1, label: '1' },
+          { val: 10, label: '10' },
+          { val: 100, label: '100' },
+          { val: 1000, label: '1K' },
+          { val: 10000, label: '10K' },
+          { val: 100000, label: '100K' },
+          { val: 1000000, label: '1M' }
+        ];
+
+        xPowers.forEach((pt, i) => {
+          const cx = padding.left + (i / 6) * plotW;
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(35, 49, 84, 0.4)';
+          ctx.moveTo(cx, padding.top);
+          ctx.lineTo(cx, height - padding.bottom);
+          ctx.stroke();
+
+          ctx.fillStyle = '#64748b';
+          ctx.font = '10px "JetBrains Mono", monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(pt.label, cx, height - padding.bottom + 16);
+        });
+
+        // Títulos de ejes
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '10px "Space Grotesk", sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('Realidad Física (10x)', width - padding.right, height - 6);
+
+        ctx.save();
+        ctx.translate(14, height / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = 'center';
+        ctx.fillText('Escala Y', 0, 0);
+        ctx.restore();
+
+        // Curva f(x) = log10(x)
+        ctx.beginPath();
+        ctx.strokeStyle = '#35e0b0';
+        ctx.lineWidth = 3;
+        ctx.shadowColor = 'rgba(53, 224, 176, 0.5)';
+        ctx.shadowBlur = 10;
+
+        for (let i = 0; i <= plotW; i++) {
+          const frac = i / plotW;
+          const logX = frac * 6;
+          const yVal = logX;
+          const pt = getCanvasCoords(Math.pow(10, logX), yVal, width, height, padding);
+          if (i === 0) ctx.moveTo(pt.x, pt.y);
+          else ctx.lineTo(pt.x, pt.y);
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Puntos fijos
+        const keyPoints = [
+          { x: 10, y: 1, label: '(10, 1)' },
+          { x: 100, y: 2, label: '(100, 2)' },
+          { x: 1000, y: 3, label: '(1,000, 3)' }
+        ];
+
+        keyPoints.forEach(kp => {
+          const pt = getCanvasCoords(kp.x, kp.y, width, height, padding);
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.fill();
+          ctx.strokeStyle = '#35e0b0';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '9px "JetBrains Mono", monospace';
+          ctx.textAlign = 'left';
+          ctx.fillText(kp.label, pt.x + 6, pt.y - 6);
+        });
+
+        // Punto interactivo actual
+        const currentY = Math.log10(Math.max(1, currentXVal));
+        const activePt = getCanvasCoords(currentXVal, currentY, width, height, padding);
+
+        ctx.beginPath();
+        ctx.setLineDash([3, 3]);
+        ctx.strokeStyle = 'rgba(255, 176, 32, 0.6)';
+        ctx.lineWidth = 1.5;
+        ctx.moveTo(activePt.x, activePt.y);
+        ctx.lineTo(activePt.x, height - padding.bottom);
+        ctx.moveTo(activePt.x, activePt.y);
+        ctx.lineTo(padding.left, activePt.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.beginPath();
+        ctx.arc(activePt.x, activePt.y, 7, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffb020';
+        ctx.shadowColor = 'rgba(255, 176, 32, 0.8)';
+        ctx.shadowBlur = 16;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        ctx.beginPath();
+        ctx.arc(activePt.x, activePt.y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = '#0a0e1a';
+        ctx.fill();
+
+        const labelText = `X: ${Math.round(currentXVal).toLocaleString()} | Y: ${currentY.toFixed(2)}`;
+        ctx.fillStyle = 'rgba(10, 14, 26, 0.88)';
+        ctx.strokeStyle = 'var(--border-bright)';
+        ctx.lineWidth = 1;
+
+        const tipWidth = 140;
+        const tipX = Math.min(width - padding.right - tipWidth, Math.max(padding.left, activePt.x - tipWidth / 2));
+        const tipY = Math.max(padding.top - 10, activePt.y - 28);
+
+        ctx.fillRect(tipX, tipY, tipWidth, 20);
+        ctx.strokeRect(tipX, tipY, tipWidth, 20);
+
+        ctx.fillStyle = '#ffb020';
+        ctx.font = '10px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(labelText, tipX + tipWidth / 2, tipY + 14);
+      }
+
+      function updateGraphTelemetry(val) {
+        currentXVal = Math.max(1, Math.min(1000000, val));
+        const logY = Math.log10(currentXVal);
+
+        telemetryX.textContent = Math.round(currentXVal).toLocaleString('en-US');
+        telemetryY.textContent = logY.toFixed(2);
+
+        let ratioText = '';
+        let ratioSubText = '';
+        let punchline = '';
+
+        if (currentXVal < 10) {
+          ratioText = 'Rango Base (1 a 10)';
+          ratioSubText = 'Valores pequeños antes de la primera potencia';
+          punchline = 'En este tramo inicial, la curva sube rápido porque los números están muy cerca entre sí.';
+        } else if (currentXVal < 100) {
+          ratioText = 'X = 10 a 100 (10x)';
+          ratioSubText = 'Y solo sube de 1 a 2 (+1)';
+          punchline = 'X avanzó 90 unidades completas, pero en la escala vertical solo subimos 1 unidad.';
+        } else if (currentXVal < 1000) {
+          ratioText = 'X = 100 a 1,000 (10x)';
+          ratioSubText = 'Y solo sube de 2 a 3 (+1)';
+          punchline = 'X recorrió 900 unidades de la realidad. En la escala solo avanzamos de 2 a 3 (+1).';
+        } else if (currentXVal < 10000) {
+          ratioText = 'X = 1K a 10K (10x)';
+          ratioSubText = 'Y solo sube de 3 a 4 (+1)';
+          punchline = 'X avanzó 9,000 unidades en la realidad. La escala se mantiene compacta subiendo apenas +1.';
+        } else if (currentXVal < 100000) {
+          ratioText = 'X = 10K a 100K (10x)';
+          ratioSubText = 'Y solo sube de 4 a 5 (+1)';
+          punchline = 'Avanzamos 90,000 unidades en el mundo real. En la escala comprimida solo pasamos del 4 al 5.';
+        } else {
+          ratioText = 'X hasta 1,000,000 (10x)';
+          ratioSubText = 'Y llega a 6 (+1)';
+          punchline = '¡Compresión total! Un millón de unidades de la realidad física contenidas en el nivel 6.';
+        }
+
+        telemetryRatioVal.textContent = ratioText;
+        telemetryRatioSub.textContent = ratioSubText;
+        graphPunchline.textContent = punchline;
+
+        const rect = graphCanvas.parentElement.getBoundingClientRect();
+        drawLogGraph(graphCtx, graphCanvas, rect.width, rect.height);
+
+        if (modalGraphCanvas && modalGraphCtx) {
+          const mX = document.getElementById('modal-telemetry-x');
+          const mY = document.getElementById('modal-telemetry-y');
+          const mRatio = document.getElementById('modal-telemetry-ratio');
+          const mPunch = document.getElementById('modal-graph-punchline');
+          const mSlider = document.getElementById('modal-graph-slider');
+
+          if (mX) mX.textContent = Math.round(currentXVal).toLocaleString('en-US');
+          if (mY) mY.textContent = logY.toFixed(2);
+          if (mRatio) mRatio.textContent = ratioText;
+          if (mPunch) mPunch.textContent = punchline;
+          if (mSlider) mSlider.value = currentXVal;
+
+          const mRect = modalGraphCanvas.parentElement.getBoundingClientRect();
+          drawLogGraph(modalGraphCtx, modalGraphCanvas, mRect.width, mRect.height);
+        }
+      }
+
+      graphSlider.addEventListener('input', function () {
+        updateGraphTelemetry(parseFloat(this.value));
+        graphPresetBtns.forEach(b => b.classList.remove('active'));
+      });
+
+      graphPresetBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+          graphPresetBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          const val = parseFloat(this.getAttribute('data-val'));
+          graphSlider.value = val;
+          updateGraphTelemetry(val);
+        });
+      });
+
+      function handleCanvasPointer(e, targetCanvas, targetSlider) {
+        const rect = targetCanvas.getBoundingClientRect();
+        const padding = { top: 25, right: 30, bottom: 40, left: 50 };
+        const plotW = rect.width - padding.left - padding.right;
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        if (!clientX) return;
+
+        const xPos = clientX - rect.left - padding.left;
+        const frac = Math.max(0, Math.min(1, xPos / plotW));
+        const power = frac * 6;
+        const calcX = Math.pow(10, power);
+
+        targetSlider.value = calcX;
+        updateGraphTelemetry(calcX);
+        graphPresetBtns.forEach(b => b.classList.remove('active'));
+      }
+
+      graphCanvas.addEventListener('pointerdown', function (e) {
+        isDraggingCanvas = true;
+        handleCanvasPointer(e, graphCanvas, graphSlider);
+      });
+      window.addEventListener('pointermove', function (e) {
+        if (isDraggingCanvas) handleCanvasPointer(e, graphCanvas, graphSlider);
+      });
+      window.addEventListener('pointerup', function () {
+        isDraggingCanvas = false;
+      });
+
+      // ------------------------------------------------------------------------
+      // 8. SECCIÓN 6 & 6.1: ESTACIÓN DE QUÍMICA (pH) — DEMO STAND
+      // ------------------------------------------------------------------------
+      const phSlider = document.getElementById('ph-slider');
+      const phValBig = document.getElementById('ph-val-big');
+      const phStateBadge = document.getElementById('ph-state-badge');
+      const phNatureText = document.getElementById('ph-nature-text');
+      const phMathLine = document.getElementById('ph-math-line');
+      const phDecimalLine = document.getElementById('ph-decimal-line');
+      const phZerosExplanation = document.getElementById('ph-zeros-explanation');
+      const beakerCards = document.querySelectorAll('.beaker-card');
+
+      function updatePhLab(ph) {
+        const phRounded = parseFloat(ph).toFixed(1);
+        phValBig.textContent = phRounded;
+
+        const conc = Math.pow(10, -ph);
+        phMathLine.innerHTML = `[H<sup>+</sup>] = 10<sup>−${phRounded}</sup> mol/L`;
+
+        let decimalStr = '';
+        if (ph >= 1 && ph <= 8) {
+          decimalStr = conc.toFixed(Math.max(2, Math.ceil(ph)));
+        } else {
+          decimalStr = conc.toExponential(3);
+        }
+
+        phDecimalLine.innerHTML = `Concentración [H<sup>+</sup>]: <strong>${decimalStr}</strong> mol/L`;
+
+        if (ph < 3.0) {
+          phStateBadge.textContent = 'Ácido Fuerte';
+          phStateBadge.style.color = '#ff4d4d';
+        } else if (ph < 6.5) {
+          phStateBadge.textContent = 'Ácido Moderado';
+          phStateBadge.style.color = '#ffb020';
+        } else if (ph >= 6.5 && ph <= 7.5) {
+          phStateBadge.textContent = 'Neutro (Agua Pura)';
+          phStateBadge.style.color = 'var(--accent-green-ph)';
+        } else if (ph < 11.0) {
+          phStateBadge.textContent = 'Base Débil';
+          phStateBadge.style.color = '#38bdf8';
+        } else {
+          phStateBadge.textContent = 'Base Fuerte';
+          phStateBadge.style.color = '#c084fc';
+        }
+
+        beakerCards.forEach(c => c.classList.remove('active-beaker'));
+        if (Math.abs(ph - 2.0) <= 0.3) {
+          phNatureText.textContent = 'Muestra 1: Jugo de Limón (pH ≈ 2)';
+          document.querySelector('.beaker-card[data-ph="2"]').classList.add('active-beaker');
+          phZerosExplanation.innerHTML = 'Concentración alta de iones: <span class="mono" style="color: var(--accent-green-ph); font-weight: 700;">0.01 mol/L</span>. Papel tornasol vira a rojo intenso.';
+        } else if (Math.abs(ph - 3.0) <= 0.3) {
+          phNatureText.textContent = 'Muestra 2: Vinagre Blanco (pH ≈ 3)';
+          document.querySelector('.beaker-card[data-ph="3"]').classList.add('active-beaker');
+          phZerosExplanation.innerHTML = 'Concentración: <span class="mono" style="color: var(--accent-green-ph); font-weight: 700;">0.001 mol/L</span>. Tiene 10 veces menos iones que el limón.';
+        } else if (Math.abs(ph - 4.0) <= 0.3) {
+          phNatureText.textContent = 'Muestra 3: Jugo de Tomate (pH ≈ 4)';
+          document.querySelector('.beaker-card[data-ph="4"]').classList.add('active-beaker');
+          phZerosExplanation.innerHTML = 'Concentración: <span class="mono" style="color: var(--accent-green-ph); font-weight: 700;">0.0001 mol/L</span>. ¡100 veces menos ácido que el limón!';
+        } else if (Math.abs(ph - 7.0) <= 0.3) {
+          phNatureText.textContent = 'Referencia: Agua Pura (pH = 7)';
+          phZerosExplanation.innerHTML = 'Punto neutro: [H<sup>+</sup>] = 0.0000001 mol/L (7 ceros tras el punto).';
+        } else {
+          phNatureText.textContent = `Solución de Prueba (pH ${phRounded})`;
+          phZerosExplanation.textContent = `Concentración [H+] = 10^(-${phRounded}). Cada unidad de pH multiplica o divide por 10 la concentración de iones.`;
+        }
+      }
+
+      phSlider.addEventListener('input', function () {
+        updatePhLab(parseFloat(this.value));
+      });
+
+      beakerCards.forEach(card => {
+        card.addEventListener('click', function () {
+          const phTarget = parseFloat(this.getAttribute('data-ph'));
+          phSlider.value = phTarget;
+          updatePhLab(phTarget);
+        });
+      });
+
+      updatePhLab(2.0);
+
+      // ------------------------------------------------------------------------
+      // 9. GESTOR DE VENTANA MODAL EMERGENTE ("TOCA PARA AGRANDAR")
+      // ------------------------------------------------------------------------
+      const expandModal = document.getElementById('expand-modal');
+      const modalBackdrop = document.getElementById('modal-backdrop');
+      const modalCloseBtn = document.getElementById('modal-close-btn');
+      const modalBodyContent = document.getElementById('modal-body-content');
+      const expandTriggers = document.querySelectorAll('[data-expand]');
+
+      function closeModal() {
+        expandModal.classList.remove('is-active');
+        expandModal.setAttribute('aria-hidden', 'true');
+        modalBodyContent.innerHTML = '';
+        modalGraphCanvas = null;
+        modalGraphCtx = null;
+        document.body.style.overflow = '';
+      }
+
+      function openModal(type) {
+        document.body.style.overflow = 'hidden';
+
+        if (type === 'zeros') {
+          modalBodyContent.innerHTML = `
+            <div style="margin-bottom: 1.25rem;">
+              <span class="section-tag">Sección 3 · Vista Ampliada</span>
+              <h2 style="font-size: clamp(1.6rem, 4vw, 2.4rem); color: #ffffff; margin-top: 0.4rem;">
+                Tabla de Compresión: "Contar Ceros"
+              </h2>
+              <p style="font-size: 1rem; color: var(--text-muted); margin-bottom: 1rem;">
+                Cada cero adicional en la magnitud real (<span class="mono">X</span>) suma exactamente <strong style="color: var(--accent-cyan);">+1 unidad</strong> en la escala logarítmica (<span class="mono">Y = log<sub>10</sub>(X)</span>).
+              </p>
+              <div style="display: flex; justify-content: flex-end; margin-bottom: 0.75rem;">
+                <button type="button" class="btn-animate-zeros" id="modal-btn-trigger-zeros" style="padding: 10px 20px; font-size: 0.92rem;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  Animar conteo de ceros en pantalla grande
+                </button>
+              </div>
+            </div>
+
+            <div style="overflow-x: auto; background: var(--bg-card); border-radius: var(--radius-md); padding: 1rem; border: 1px solid var(--border-subtle);">
+              <table class="zeros-table" id="modal-zeros-table" style="font-size: 1.15rem; min-width: 600px;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--accent-cyan);">
+                    <th style="font-size: 0.85rem; padding: 10px 14px;">Magnitud Real (X)</th>
+                    <th style="font-size: 0.85rem; padding: 10px 14px;">Potencia de 10</th>
+                    <th class="num-align-right" style="font-size: 0.85rem; padding: 10px 14px;">Ceros Contados</th>
+                    <th class="num-align-right" style="font-size: 0.85rem; padding: 10px 14px;">Logaritmo (Y)</th>
+                    <th style="font-size: 0.85rem; padding: 10px 14px;">Lectura de la Escala</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-zeros="1"><td style="padding: 12px 14px;"><span class="mono" style="font-size: 1.25rem;">1<span class="zero-char">0</span></span></td><td>10<sup>1</sup></td><td class="num-align-right" style="color: var(--accent-amber); font-weight: 700;">1 cero</td><td class="num-align-right" style="color: var(--accent-cyan); font-weight: 800; font-size: 1.35rem;">1</td><td>Escala Nivel 1</td></tr>
+                  <tr data-zeros="2"><td style="padding: 12px 14px;"><span class="mono" style="font-size: 1.25rem;">1<span class="zero-char">0</span><span class="zero-char">0</span></span></td><td>10<sup>2</sup></td><td class="num-align-right" style="color: var(--accent-amber); font-weight: 700;">2 ceros</td><td class="num-align-right" style="color: var(--accent-cyan); font-weight: 800; font-size: 1.35rem;">2</td><td>Escala Nivel 2 (10x más que el Nivel 1)</td></tr>
+                  <tr data-zeros="3"><td style="padding: 12px 14px;"><span class="mono" style="font-size: 1.25rem;">1,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span></span></td><td>10<sup>3</sup></td><td class="num-align-right" style="color: var(--accent-amber); font-weight: 700;">3 ceros</td><td class="num-align-right" style="color: var(--accent-cyan); font-weight: 800; font-size: 1.35rem;">3</td><td>Escala Nivel 3 (10x más que el Nivel 2)</td></tr>
+                  <tr data-zeros="4"><td style="padding: 12px 14px;"><span class="mono" style="font-size: 1.25rem;">1<span class="zero-char">0</span>,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span></span></td><td>10<sup>4</sup></td><td class="num-align-right" style="color: var(--accent-amber); font-weight: 700;">4 ceros</td><td class="num-align-right" style="color: var(--accent-cyan); font-weight: 800; font-size: 1.35rem;">4</td><td>Escala Nivel 4</td></tr>
+                  <tr data-zeros="5"><td style="padding: 12px 14px;"><span class="mono" style="font-size: 1.25rem;">1<span class="zero-char">0</span><span class="zero-char">0</span>,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span></span></td><td>10<sup>5</sup></td><td class="num-align-right" style="color: var(--accent-amber); font-weight: 700;">5 ceros</td><td class="num-align-right" style="color: var(--accent-cyan); font-weight: 800; font-size: 1.35rem;">5</td><td>Escala Nivel 5</td></tr>
+                  <tr data-zeros="6"><td style="padding: 12px 14px;"><span class="mono" style="font-size: 1.25rem;">1,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span>,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span></span></td><td>10<sup>6</sup></td><td class="num-align-right" style="color: var(--accent-amber); font-weight: 700;">6 ceros</td><td class="num-align-right" style="color: var(--accent-cyan); font-weight: 800; font-size: 1.35rem;">6</td><td>Escala Nivel 6 (Un millón comprimido en 6)</td></tr>
+                  <tr data-zeros="9"><td style="padding: 12px 14px;"><span class="mono" style="font-size: 1.25rem;">1,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span>,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span>,<span class="zero-char">0</span><span class="zero-char">0</span><span class="zero-char">0</span></span></td><td>10<sup>9</sup></td><td class="num-align-right" style="color: var(--accent-amber); font-weight: 700;">9 ceros</td><td class="num-align-right" style="color: var(--accent-cyan); font-weight: 800; font-size: 1.35rem;">9</td><td>Escala Nivel 9 (Mil millones comprimido en 9)</td></tr>
+                </tbody>
+              </table>
+            </div>
+          `;
+
+          const modalBtn = document.getElementById('modal-btn-trigger-zeros');
+          const modalRows = document.querySelectorAll('#modal-zeros-table tbody tr');
+          modalBtn.addEventListener('click', function () {
+            runZerosAnimation(modalRows, modalBtn);
+          });
+
+        } else if (type === 'graph') {
+          modalBodyContent.innerHTML = `
+            <div style="margin-bottom: 1rem;">
+              <span class="section-tag">Sección 5 · Vista Ampliada de Telemetría</span>
+              <h2 style="font-size: clamp(1.5rem, 4vw, 2.4rem); color: #ffffff; margin-top: 0.4rem;">
+                Simulador Gráfico Ampliado: f(x) = log<sub>10</sub>(x)
+              </h2>
+              <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1rem;">
+                Arrastra el cursor sobre la curva o mueve el slider para observar la compresión en tiempo real.
+              </p>
+            </div>
+
+            <!-- TELEMETRÍA EN MODAL -->
+            <div class="graph-telemetry-grid" style="margin-bottom: 1rem;">
+              <div class="telemetry-pod x-lane">
+                <div class="telemetry-title">Eje X · Realidad Física</div>
+                <div class="telemetry-val mono" style="color: var(--accent-amber);" id="modal-telemetry-x">${Math.round(currentXVal).toLocaleString()}</div>
+                <div class="telemetry-sub">Unidades de energía o concentración</div>
+              </div>
+              <div class="telemetry-pod y-lane">
+                <div class="telemetry-title">Eje Y · Escala Comprimida</div>
+                <div class="telemetry-val mono" style="color: var(--accent-cyan);" id="modal-telemetry-y">${Math.log10(currentXVal).toFixed(2)}</div>
+                <div class="telemetry-sub">Valor de escala f(x) = log<sub>10</sub>(x)</div>
+              </div>
+              <div class="telemetry-pod ratio-lane">
+                <div class="telemetry-title">Comportamiento en Vivo</div>
+                <div class="telemetry-val mono" style="color: var(--accent-green-ph); font-size: 1.35rem;" id="modal-telemetry-ratio">X avanza 10x</div>
+                <div class="telemetry-sub">Y solo sube +1 unidad</div>
+              </div>
+            </div>
+
+            <!-- CANVAS DEL MODAL -->
+            <div class="canvas-wrapper" style="height: 340px;">
+              <canvas id="modal-graph-canvas" aria-label="Gráfico interactivo ampliado de la función logarítmica"></canvas>
+            </div>
+
+            <!-- CONTROLES EN EL MODAL -->
+            <div class="graph-controls" style="margin-top: 0.85rem;">
+              <div class="graph-slider-row">
+                <span class="mono" style="font-size: 0.8rem; color: var(--text-dim);">1</span>
+                <input type="range" min="1" max="1000000" value="${currentXVal}" class="custom-range" id="modal-graph-slider" style="margin: 0;" aria-label="Slider ampliado para mover valor X">
+                <span class="mono" style="font-size: 0.8rem; color: var(--text-dim);">1,000,000</span>
+              </div>
+
+              <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem; margin-top: 0.6rem;">
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Puntos Clave Rápidos:</span>
+                <div class="graph-preset-buttons">
+                  <button type="button" class="btn-graph-preset modal-preset" data-val="10">(10, 1)</button>
+                  <button type="button" class="btn-graph-preset modal-preset" data-val="100">(100, 2)</button>
+                  <button type="button" class="btn-graph-preset modal-preset" data-val="1000">(1,000, 3)</button>
+                  <button type="button" class="btn-graph-preset modal-preset" data-val="10000">(10,000, 4)</button>
+                  <button type="button" class="btn-graph-preset modal-preset" data-val="100000">(100,000, 5)</button>
+                  <button type="button" class="btn-graph-preset modal-preset" data-val="1000000">(1,000,000, 6)</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="graph-live-punchline" id="modal-graph-punchline" style="font-size: 1.05rem; margin-top: 1rem;">
+              Nota cómo en el eje Y subimos pasos pequeños (+1), pero en el eje X avanzamos distancias astronómicas (10x). ¡Esa es la compresión logarítmica!
+            </div>
+          `;
+
+          modalGraphCanvas = document.getElementById('modal-graph-canvas');
+          modalGraphCtx = modalGraphCanvas.getContext('2d');
+          const modalSlider = document.getElementById('modal-graph-slider');
+          const modalPresets = document.querySelectorAll('.modal-preset');
+
+          function resizeModalCanvas() {
+            if (!modalGraphCanvas) return;
+            const dpr = window.devicePixelRatio || 1;
+            const rect = modalGraphCanvas.parentElement.getBoundingClientRect();
+            modalGraphCanvas.width = rect.width * dpr;
+            modalGraphCanvas.height = rect.height * dpr;
+            modalGraphCtx.resetTransform();
+            modalGraphCtx.scale(dpr, dpr);
+            drawLogGraph(modalGraphCtx, modalGraphCanvas, rect.width, rect.height);
+          }
+
+          setTimeout(resizeModalCanvas, 60);
+
+          modalSlider.addEventListener('input', function () {
+            const val = parseFloat(this.value);
+            graphSlider.value = val;
+            updateGraphTelemetry(val);
+          });
+
+          modalPresets.forEach(btn => {
+            btn.addEventListener('click', function () {
+              const val = parseFloat(this.getAttribute('data-val'));
+              graphSlider.value = val;
+              modalSlider.value = val;
+              updateGraphTelemetry(val);
+            });
+          });
+
+          modalGraphCanvas.addEventListener('pointerdown', function (e) {
+            isDraggingModalCanvas = true;
+            handleCanvasPointer(e, modalGraphCanvas, modalSlider);
+          });
+          window.addEventListener('pointermove', function (e) {
+            if (isDraggingModalCanvas) handleCanvasPointer(e, modalGraphCanvas, modalSlider);
+          });
+          window.addEventListener('pointerup', function () {
+            isDraggingModalCanvas = false;
+          });
+        }
+
+        expandModal.classList.add('is-active');
+        expandModal.setAttribute('aria-hidden', 'false');
+      }
+
+      expandTriggers.forEach(trig => {
+        trig.addEventListener('click', function () {
+          const type = this.getAttribute('data-expand');
+          openModal(type);
+        });
+        trig.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            const type = this.getAttribute('data-expand');
+            openModal(type);
+          }
+        });
+      });
+
+      modalCloseBtn.addEventListener('click', closeModal);
+      modalBackdrop.addEventListener('click', closeModal);
+
+      window.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && expandModal.classList.contains('is-active')) {
+          closeModal();
+        }
+      });
+
+      // ------------------------------------------------------------------------
+      // 10. GESTOR DE REDIMENSIONAMIENTO Y ROTACIÓN (HORIZONTAL / VERTICAL)
+      // ------------------------------------------------------------------------
+      function handleOrientationAndResize() {
+        heroWidth = heroCanvas.width = window.innerWidth;
+        heroHeight = heroCanvas.height = window.innerHeight;
+        resizeGraphCanvas();
+        updateRulerDemo();
+
+        if (expandModal.classList.contains('is-active') && modalGraphCanvas && modalGraphCtx) {
+          const dpr = window.devicePixelRatio || 1;
+          const rect = modalGraphCanvas.parentElement.getBoundingClientRect();
+          modalGraphCanvas.width = rect.width * dpr;
+          modalGraphCanvas.height = rect.height * dpr;
+          modalGraphCtx.resetTransform();
+          modalGraphCtx.scale(dpr, dpr);
+          drawLogGraph(modalGraphCtx, modalGraphCanvas, rect.width, rect.height);
+        }
+      }
+
+      window.addEventListener('resize', handleOrientationAndResize);
+      window.addEventListener('orientationchange', function () {
+        setTimeout(handleOrientationAndResize, 150);
+        setTimeout(handleOrientationAndResize, 350);
+      });
+      setTimeout(handleOrientationAndResize, 100);
+
+    })();
+  </script>
+</body>
+</html>
