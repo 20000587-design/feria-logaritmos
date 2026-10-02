@@ -12,7 +12,9 @@
 
   <style>
     /* ==========================================================================
-       FUENTE GÓTICA EXCLUSIVA PARA EL TÍTULO "FUNCIONES LOGARÍTMICAS"
+       FUENTES GÓTICAS:
+       1. BERRY ROTUNDA (Título Principal "FUNCIONES LOGARÍTMICAS")
+       2. CHOMSKY (Subtemas de las Secciones)
        ========================================================================== */
     @font-face {
       font-family: 'Berry Rotunda';
@@ -22,10 +24,20 @@
       font-display: swap;
     }
 
+    @font-face {
+      font-family: 'Chomsky';
+      src: url('Chomsky.woff2') format('woff2'),
+           url('Chomsky.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
     /* ==========================================================================
        VARIABLES Y PALETA DE COLOR: INSPIRADA EN ODOO (BLANCO HUESO, ARENA Y OCRE)
        ========================================================================== */
     :root {
+      --font-chomsky: 'Chomsky', Georgia, serif;
       /* Fondos en paleta Odoo */
       --bg-space: #faf8f4;         /* Fondo base general: blanco hueso / crema */
       --bg-surface: #f5ead2;       /* Superficie principal: arena / beige suave */
@@ -341,7 +353,10 @@
     }
 
     .section-title {
+      font-family: var(--font-chomsky);
       font-size: clamp(1.8rem, 4.5vw, 3rem);
+      font-weight: normal;
+      letter-spacing: 0.02em;
       margin-bottom: 1.25rem;
     }
 
@@ -1703,12 +1718,12 @@
        SECCIÓN 7 — CONCLUSIÓN (EL MENSAJE CENTRAL)
        ========================================================================== */
     .conclusion-hero-title {
-      font-size: clamp(2.2rem, 6.5vw, 4.5rem);
-      font-weight: 800;
+      font-family: var(--font-chomsky);
+      font-size: clamp(2.2rem, 6.5vw, 4.2rem);
+      font-weight: normal;
       color: #1e2430;
       margin-bottom: 1.5rem;
-      text-transform: uppercase;
-      letter-spacing: -0.02em;
+      letter-spacing: 0.02em;
     }
 
     .conclusion-three-pillars {
