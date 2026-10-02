@@ -15,6 +15,7 @@
        FUENTES GÓTICAS OFICIALES: 
        1. CHOMSKY (Minúsculas y Títulos Mixtos)
        2. BERRY ROTUNDA (Mayúsculas / Titular Monumental)
+       3. GERMANICA & OLD LONDON (Góticas Limpias sin colitas)
        ========================================================================== */
     @font-face {
       font-family: 'Chomsky';
@@ -28,6 +29,22 @@
     @font-face {
       font-family: 'Berry Rotunda';
       src: url('BerryRotunda.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Germanica';
+      src: url('Germanica.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Old London';
+      src: url('OldLondon.ttf') format('truetype');
       font-weight: normal;
       font-style: normal;
       font-display: swap;
@@ -67,8 +84,9 @@
       --text-muted: #5c6270;       /* Gris carbón suave para párrafos */
       --text-dim: #8a7a5d;         /* Ocre suave para anotaciones secundarias */
       
-      --font-gothic: 'Chomsky', 'UnifrakturMaguntia', 'Old English Text MT', Georgia, serif;
-      --font-gothic-rotunda: 'Berry Rotunda', 'Chomsky', 'UnifrakturMaguntia', Georgia, serif;
+      --font-gothic: 'Germanica', 'Old London', 'Chomsky', 'UnifrakturMaguntia', Georgia, serif;
+      --font-gothic-clean: 'Germanica', 'Old London', serif;
+      --font-gothic-rotunda: 'Berry Rotunda', 'Germanica', Georgia, serif;
       --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
       --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -585,23 +603,23 @@
 
     .hero-title {
       font-family: var(--font-gothic-rotunda);
-      font-size: clamp(2.2rem, 7vw, 5rem);
+      font-size: clamp(1.8rem, 5.2vw, 3.8rem);
       font-weight: normal;
-      letter-spacing: 0.04em;
-      line-height: 1.08;
-      margin-bottom: 1rem;
+      letter-spacing: 0.03em;
+      line-height: 1.15;
+      margin-bottom: 0.8rem;
       background: linear-gradient(135deg, #1e2430 35%, #2a8068 90%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .hero-subtitle {
-      font-size: clamp(1.2rem, 3.5vw, 2.2rem);
-      font-family: var(--font-gothic);
+      font-size: clamp(1rem, 2.6vw, 1.65rem);
+      font-family: var(--font-gothic-clean);
       color: var(--accent-amber);
       font-weight: normal;
       margin-bottom: 1.5rem;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
     }
 
     .hero-counter-box {
