@@ -5,12 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Cuantificación de Magnitudes Extremas mediante Funciones Logarítmicas | Feria de Logros INAC 2026</title>
   
-  <!-- Google Fonts: Space Grotesk (Titulares Display) + JetBrains Mono (Números y Datos) + Inter (Lectura) -->
+  <!-- Google Fonts: Space Grotesk + JetBrains Mono + Inter + UnifrakturMaguntia (Gothic Fallback) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 
   <style>
+    /* ==========================================================================
+       FUENTE GÓTICA OFICIAL: CHOMSKY (DAFONT) CON FALLBACK UNIFRAKTURMAGUNTIA
+       ========================================================================== */
+    @font-face {
+      font-family: 'Chomsky';
+      src: url('Chomsky.woff2') format('woff2'),
+           url('Chomsky.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
     /* ==========================================================================
        VARIABLES Y PALETA DE COLOR: INSPIRADA EN ODOO (BLANCO HUESO, ARENA Y OCRE)
        ========================================================================== */
@@ -45,6 +57,7 @@
       --text-muted: #5c6270;       /* Gris carbón suave para párrafos */
       --text-dim: #8a7a5d;         /* Ocre suave para anotaciones secundarias */
       
+      --font-gothic: 'Chomsky', 'UnifrakturMaguntia', 'Old English Text MT', Georgia, serif;
       --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
       --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -116,10 +129,10 @@
     }
 
     h1, h2, h3, h4 {
-      font-family: var(--font-display);
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      font-weight: 700;
+      font-family: var(--font-gothic);
+      line-height: 1.18;
+      letter-spacing: 0.02em;
+      font-weight: normal;
       color: var(--text-main);
     }
 
@@ -454,6 +467,12 @@
       opacity: 0;
     }
 
+    .modal-body h2, .modal-body h3 {
+      font-family: var(--font-gothic);
+      font-weight: normal;
+      letter-spacing: 0.02em;
+    }
+
     .expand-modal-overlay.is-active .expand-modal-container {
       animation: modalEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
@@ -554,10 +573,11 @@
     }
 
     .hero-title {
+      font-family: var(--font-gothic);
       font-size: clamp(2.5rem, 8vw, 5.5rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 0.98;
+      font-weight: normal;
+      letter-spacing: 0.02em;
+      line-height: 1.05;
       margin-bottom: 1rem;
       background: linear-gradient(135deg, #1e2430 35%, #2a8068 90%);
       -webkit-background-clip: text;
@@ -565,12 +585,12 @@
     }
 
     .hero-subtitle {
-      font-size: clamp(1.2rem, 3.5vw, 2rem);
-      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 3.5vw, 2.2rem);
+      font-family: var(--font-gothic);
       color: var(--accent-amber);
-      font-weight: 600;
+      font-weight: normal;
       margin-bottom: 1.5rem;
-      letter-spacing: -0.01em;
+      letter-spacing: 0.02em;
     }
 
     .hero-counter-box {
@@ -1159,8 +1179,10 @@
     }
 
     .card-discipline-name {
-      font-size: 1.2rem;
-      font-weight: 700;
+      font-family: var(--font-gothic);
+      font-size: 1.35rem;
+      font-weight: normal;
+      letter-spacing: 0.02em;
       margin-bottom: 0.2rem;
     }
 
@@ -1435,8 +1457,10 @@
     }
 
     .beaker-liquid-name {
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-family: var(--font-gothic);
+      font-size: 1.35rem;
+      font-weight: normal;
+      letter-spacing: 0.02em;
       margin-bottom: 0.2rem;
     }
 
@@ -1691,12 +1715,12 @@
        SECCIÓN 7 — CONCLUSIÓN (EL MENSAJE CENTRAL)
        ========================================================================== */
     .conclusion-hero-title {
+      font-family: var(--font-gothic);
       font-size: clamp(2.2rem, 6.5vw, 4.5rem);
-      font-weight: 800;
+      font-weight: normal;
       color: #1e2430;
       margin-bottom: 1.5rem;
-      text-transform: uppercase;
-      letter-spacing: -0.02em;
+      letter-spacing: 0.02em;
     }
 
     .conclusion-three-pillars {
@@ -1972,8 +1996,10 @@
     }
 
     .footer-credits-title {
-      font-family: var(--font-display);
-      font-size: 1.25rem;
+      font-family: var(--font-gothic);
+      font-size: 1.4rem;
+      font-weight: normal;
+      letter-spacing: 0.02em;
       color: var(--text-main);
       margin-bottom: 0.5rem;
     }
@@ -2104,23 +2130,24 @@
     }
 
     .welcome-line-main {
-      font-family: var(--font-display, 'Syne', sans-serif);
+      font-family: var(--font-gothic);
       font-size: clamp(2.4rem, 6.5vw, 4.8rem);
-      font-weight: 800;
+      font-weight: normal;
       color: #1e2430;
       line-height: 1.1;
-      letter-spacing: -0.02em;
+      letter-spacing: 0.02em;
       text-shadow: 0 2px 20px rgba(245, 234, 210, 0.8);
       margin-bottom: 0.8rem;
       min-height: 1.2em;
     }
 
     .welcome-line-grade {
-      font-family: var(--font-display, 'Syne', sans-serif);
+      font-family: var(--font-gothic);
       font-size: clamp(1.8rem, 4.5vw, 3.4rem);
-      font-weight: 700;
+      font-weight: normal;
       color: #b88628;
       line-height: 1.15;
+      letter-spacing: 0.02em;
       text-shadow: 0 2px 18px rgba(217, 184, 120, 0.4);
       margin-bottom: 1.2rem;
       min-height: 1.2em;
