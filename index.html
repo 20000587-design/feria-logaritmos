@@ -5,46 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Cuantificación de Magnitudes Extremas mediante Funciones Logarítmicas | Feria de Logros INAC 2026</title>
   
-  <!-- Google Fonts: Space Grotesk + JetBrains Mono + Inter + UnifrakturMaguntia (Gothic Fallback) -->
+  <!-- Google Fonts: Space Grotesk (Titulares Display) + JetBrains Mono (Números y Datos) + Inter (Lectura) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     /* ==========================================================================
-       FUENTES GÓTICAS OFICIALES: 
-       1. CHOMSKY (Minúsculas y Títulos Mixtos)
-       2. BERRY ROTUNDA (Mayúsculas / Titular Monumental)
-       3. GERMANICA & OLD LONDON (Góticas Limpias sin colitas)
+       FUENTE GÓTICA EXCLUSIVA PARA EL TÍTULO "FUNCIONES LOGARÍTMICAS"
        ========================================================================== */
-    @font-face {
-      font-family: 'Chomsky';
-      src: url('Chomsky.woff2') format('woff2'),
-           url('Chomsky.otf') format('opentype');
-      font-weight: normal;
-      font-style: normal;
-      font-display: swap;
-    }
-
     @font-face {
       font-family: 'Berry Rotunda';
       src: url('BerryRotunda.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: 'Germanica';
-      src: url('Germanica.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: 'Old London';
-      src: url('OldLondon.ttf') format('truetype');
       font-weight: normal;
       font-style: normal;
       font-display: swap;
@@ -84,9 +56,6 @@
       --text-muted: #5c6270;       /* Gris carbón suave para párrafos */
       --text-dim: #8a7a5d;         /* Ocre suave para anotaciones secundarias */
       
-      --font-gothic: 'Germanica', 'Old London', 'Chomsky', 'UnifrakturMaguntia', Georgia, serif;
-      --font-gothic-clean: 'Germanica', 'Old London', serif;
-      --font-gothic-rotunda: 'Berry Rotunda', 'Germanica', Georgia, serif;
       --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
       --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -158,10 +127,10 @@
     }
 
     h1, h2, h3, h4 {
-      font-family: var(--font-gothic);
-      line-height: 1.18;
-      letter-spacing: 0.02em;
-      font-weight: normal;
+      font-family: var(--font-display);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-weight: 700;
       color: var(--text-main);
     }
 
@@ -287,10 +256,10 @@
     }
 
     .brand-title {
-      font-family: var(--font-gothic-rotunda);
-      font-size: 1.05rem;
-      font-weight: normal;
-      letter-spacing: 0.04em;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
       line-height: 1.1;
     }
 
@@ -496,12 +465,6 @@
       opacity: 0;
     }
 
-    .modal-body h2, .modal-body h3 {
-      font-family: var(--font-gothic);
-      font-weight: normal;
-      letter-spacing: 0.02em;
-    }
-
     .expand-modal-overlay.is-active .expand-modal-container {
       animation: modalEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
@@ -602,24 +565,24 @@
     }
 
     .hero-title {
-      font-family: var(--font-gothic-rotunda);
-      font-size: clamp(1.8rem, 5.2vw, 3.8rem);
+      font-family: 'Berry Rotunda', 'Space Grotesk', serif;
+      font-size: clamp(2rem, 5.5vw, 4.2rem);
       font-weight: normal;
       letter-spacing: 0.03em;
-      line-height: 1.15;
-      margin-bottom: 0.8rem;
+      line-height: 1.1;
+      margin-bottom: 1rem;
       background: linear-gradient(135deg, #1e2430 35%, #2a8068 90%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .hero-subtitle {
-      font-size: clamp(1rem, 2.6vw, 1.65rem);
-      font-family: var(--font-gothic-clean);
+      font-size: clamp(1.2rem, 3.5vw, 2rem);
+      font-family: var(--font-display);
       color: var(--accent-amber);
-      font-weight: normal;
+      font-weight: 600;
       margin-bottom: 1.5rem;
-      letter-spacing: 0.01em;
+      letter-spacing: -0.01em;
     }
 
     .hero-counter-box {
@@ -1208,10 +1171,8 @@
     }
 
     .card-discipline-name {
-      font-family: var(--font-gothic);
-      font-size: 1.35rem;
-      font-weight: normal;
-      letter-spacing: 0.02em;
+      font-size: 1.2rem;
+      font-weight: 700;
       margin-bottom: 0.2rem;
     }
 
@@ -1486,10 +1447,8 @@
     }
 
     .beaker-liquid-name {
-      font-family: var(--font-gothic);
-      font-size: 1.35rem;
-      font-weight: normal;
-      letter-spacing: 0.02em;
+      font-size: 1.25rem;
+      font-weight: 700;
       margin-bottom: 0.2rem;
     }
 
@@ -1744,12 +1703,12 @@
        SECCIÓN 7 — CONCLUSIÓN (EL MENSAJE CENTRAL)
        ========================================================================== */
     .conclusion-hero-title {
-      font-family: var(--font-gothic);
       font-size: clamp(2.2rem, 6.5vw, 4.5rem);
-      font-weight: normal;
+      font-weight: 800;
       color: #1e2430;
       margin-bottom: 1.5rem;
-      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
     }
 
     .conclusion-three-pillars {
@@ -2025,10 +1984,8 @@
     }
 
     .footer-credits-title {
-      font-family: var(--font-gothic);
-      font-size: 1.4rem;
-      font-weight: normal;
-      letter-spacing: 0.02em;
+      font-family: var(--font-display);
+      font-size: 1.25rem;
       color: var(--text-main);
       margin-bottom: 0.5rem;
     }
@@ -2159,24 +2116,23 @@
     }
 
     .welcome-line-main {
-      font-family: var(--font-gothic);
+      font-family: var(--font-display, 'Syne', sans-serif);
       font-size: clamp(2.4rem, 6.5vw, 4.8rem);
-      font-weight: normal;
+      font-weight: 800;
       color: #1e2430;
       line-height: 1.1;
-      letter-spacing: 0.02em;
+      letter-spacing: -0.02em;
       text-shadow: 0 2px 20px rgba(245, 234, 210, 0.8);
       margin-bottom: 0.8rem;
       min-height: 1.2em;
     }
 
     .welcome-line-grade {
-      font-family: var(--font-gothic);
+      font-family: var(--font-display, 'Syne', sans-serif);
       font-size: clamp(1.8rem, 4.5vw, 3.4rem);
-      font-weight: normal;
+      font-weight: 700;
       color: #b88628;
       line-height: 1.15;
-      letter-spacing: 0.02em;
       text-shadow: 0 2px 18px rgba(217, 184, 120, 0.4);
       margin-bottom: 1.2rem;
       min-height: 1.2em;
